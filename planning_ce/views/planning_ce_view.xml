@@ -1,14 +1,67 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<data><xpath expr="//div[@id='o_work_employee_main']" position="inside">
-                <group name="planning" string="Planning">
-                    <field name="default_planning_role_id"/>
-                    <field name="planning_role_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                </group>
-            </xpath>
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button string="Planning" class="oe_stat_button" icon="fa-tasks" name="action_view_planning" type="object"/>
-            </xpath>
-        </data>
+    <data>
+        <record id="hr_employee_view_form" model="ir.ui.view">
+            <field name="name">hr.employee.view.form.planning_ce</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.hr_employee_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='o_work_employee_main']" position="inside">
+                    <group name="planning" string="Planning">
+                        <field name="default_planning_role_id" />
+                        <field name="planning_role_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
+                    </group>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button string="Planning" class="oe_stat_button" icon="fa-tasks" name="action_view_planning" type="object" />
+                </xpath>
+            </field>
+        </record>
+        <record id="planning_view_timeline" model="ir.ui.view">
+            <field name="name">planning_ce.slot.timeline</field>
+            <field name="model">planning_ce.slot</field>
+            <field name="arch" type="xml">
+                <timeline js_class="planning_gantt" form_view_id="1944" date_start="start_datetime" date_stop="end_datetime" default_group_by="employee_id" default_scale="week" color="color" plan="false" string="Schedule" total_row="True" scales="day,week,month,year" precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full', 'year': 'day:full'}" decoration-info="not is_published" decoration-warning="publication_warning and is_published" decoration-danger="overlap_slot_count &gt; 0" display_unavailability="1" sample="1">
+                    <field name="allocated_hours" />
+                    <field name="recurrency_id" />
+                    <field name="is_published" />
+                    <field name="publication_warning" />
+                    <field name="employee_id" />
+                    <field name="overlap_slot_count" />
+                    <field name="allocated_percentage" />
+                    <field name="name" />
+                    <templates>
+                        <div t-name="gantt-popover" class="container-fluid">
+                            <div class="row no-gutters">
+                                <div class="col">
+                                    <ul class="pl-1 mb-0">
+                                        <li>
+                                            <strong>Start Date:</strong>
+                                            <t t-esc="userTimezoneStartDate.format('L LTS')" />
+                                        </li>
+                                        <li>
+                                            <strong>Stop Date:</strong>
+                                            <t t-esc="userTimezoneStopDate.format('L LTS')" />
+                                        </li>
+                                        <li id="allocated_hours">
+                                            <strong>Allocated Hours:</strong>
+                                            <t t-esc="'' + Math.floor(allocated_hours) + ':' + ((allocated_hours % 1) * 60 &gt;= 10 ? Math.round((allocated_hours % 1) * 60) : '0'+Math.round((allocated_hours % 1) * 60))" />
+                                        </li>
+                                    </ul>
+                                    <p class="mt-2 mb-0" t-if="name">
+                                        <t t-esc="name.slice(0, 200) + (name.length &gt; 200?'…':'')" />
+                                    </p>
+                                    <p t-if="is_published and publication_warning and !overlap_slot_count" class="text-warning mt-2 mb-0">Some changes were made since this shift was published.</p>
+                                    <p t-if="overlap_slot_count" class="text-danger mt-2 mb-0">
+                                        <t t-esc="overlap_slot_count" />
+                                        other shift(s) in conflict.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </templates>
+                </timeline>
+            </field>
+        </record>
+    </data>
 </odoo>

@@ -7,72 +7,68 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class ProjectCePlanning(models.Model):
-    #_name = 'project.task.tasktype'
+class PlannerCePlanning(models.Model):
+    _name = 'planner_ce.planner'
     #_description = 'Task Stage'
     #_order = 'name'
     #__last_update	Last Modified on	datetime​	Base Field 
-active	Active	boolean​	Base Field 
-create_date	Created on	datetime ​	Base Field 
-create_uid	Created by	many2one​	Base Field 
-display_name	Display Name	char	​	Base Field 
-id	ID	integer​	Base Field 
-name	Name	char		Base Field 
-plan_activity_type_ids	Activities	many2many​	Base Field 
-write_date	Last Updated on	datetime​	Base Field
-write_uid	Last Updated by	many2one Base Field
+    active=fields.Boolean(string='Active')
+    create_date=fields.Date(string='Created on') # fields.date.add|context_today|end_of|start_of|substract|to_date|to_string|today 
+    create_uid=fields.Many2one(comodel_name='Created by') # domain|context|ondelete="'set null', 'restrict', 'cascade'"|auto_join|delegate 
+    display_name=fields.Char(string='Display Name', size=64, trim=True, )d 
+ 
+    name=fields.Char(string='Name', size=64, trim=True, ) 
+    plan_activity_type_ids=fields.Many2many(comodel_name='Activities',string='_') # relation|column1|column2
+    write_date=fields.Date(string='Last Updated on')
+    write_uid=fields.Many2one(comodel_name='Last Updated by') 
 
-class ProjectCePlanningRole(models.Model):
-  __last_update	Last Modified on	datetime	Base Field
-color	Color	integer	Base Field
-create_date	Created on	datetime	Base Field
-create_uid	Created by	many2one	Base Field
-display_name	Display Name	char		Base Field
-employee_ids	Employees	many2many	Base Field
-id	ID	integer	Base Field
-name	Name	char		Base Field
-sequence	Sequence	integer	Base Field
-write_date	Last Updated on	datetime	Base Field
-write_uid	Last Updated by	many2one	Base Field
+class PlannerCePlanningRole(models.Model):
+    _name = 'planner_ce.role'
+    color=fields.Integer(string='Color')
+    create_date=fields.Date(string='Created on')
+    create_uid=fields.Many2one(comodel_name='Created by') 
+    display_name=fields.Char(string='Display name', size=64, trim=True, )
+    employee_ids=fields.Many2many(comodel_name='Employees',string='Employees')
+    sequence=fields.Integer(string='Sequence')
+    write_date=fields.Date(string='Last Updated') 
+    write_uid=fields.Many2one(comodel_name='Last Updated')
 
-class ProjectCePlanningShift(models.Model):
-  __last_update	Last Modified on	datetime	Base Field
-access_token	Security Token	char	Base Field
-allocated_hours	Allocated Hours	float	Base Field
-allocated_percentage	Allocated Time (%)	float		Base Field
-allocation_type	Allocation Type	selection		Base Field
-allow_forecast	Planning	boolean		Base Field
-allow_self_unassign	Let Employee Unassign Themselves	boolean	Base Field
-allow_template_creation	Allow Template Creation	boolean Base Field
-allow_timesheets	Allow timesheets	boolean	Base Field
-color	Color	integer	Base Field
-company_id	Company	many2one		Base Field
-confirm_delete	Confirm Slots Deletion	boolean	Base Field
-create_date	Created on	datetime	Base Field
-create_uid	Created by	many2one	Base Field
-department_id	Department	many2one	Base Field
-display_name	Display Name	char		Base Field
-effective_hours	Effective Hours	float		Base Field
-employee_id	Employee	many2one	Base Field
-end_datetime	End Date	datetime	Base Field
-forecast_hours	Forecast Hours	float		Base Field
-id	ID	integer		Base Field
-is_assigned_to_me	Is This Shift Assigned To The Current User	boolean	Base Field
-is_past	Is This Shift In The Past?	boolean	Base Field
-is_published	Is The Shift Sent	boolean	Base Field
-manager_id	Manager	many2one		Base Field
-name	Note	text		Base Field
-order_line_id	Sales Order Line	many2one	Base Field
-overlap_slot_count	Overlapping Slots	integer		Base Field
-parent_id	Parent Task	many2one		Base Field
-percentage_hours	Progress	float		Base Field
-planned_hours	Initially Planned Hours	float		Base Field
-previous_template_id	Previous Template	many2one		Base Field
-project_id	Project	many2one		Base Field
-publication_warning	Modified Since Last Publication	boolean	Base Field
-recurrency_id	Recurrency	many2one	Base Field
-repeat	Repeat	boolean		Base Field
-repeat_interval	Repeat every	integer	Base Field
-repeat_type	Repeat Type	selection		Base Field
-repeat_until	Repeat Until	date		Base Field
-role_id	Role	many2one		Base Field
+class PlannerCePlanningSlot(models.Model):
+    _name = 'planner_ce.slot'
+    #__last_update	Last Modified on	datetime	Base Field
+    access_token=fields.Char(string='Security Token', size=64, trim=True, )
+    allocated_hours=fields.Float(string='Allocated Hours')
+    allocated_percentage=fields.Float(string='Allocated Time')
+    allocation_type=fields.Selection(selection=[('planning','Planning'),('forecast','Forecast')],string='Allocation')
+    allow_forecast=fields.Boolean(string='Planning')
+    allow_self_unassign=fields.Boolean(string='Let Employee Unassign')
+    allow_template_creation=fields.Boolean(string='Allow Template Creation')
+    allow_timesheets=fields.Boolean(string='Allow timesheets')
+    color=fields.Integer(string='Color')
+    company_id=fields.Many2one(comodel_name='res.company')
+    confirm_delete = fields.Boolean(string='Confirm Slots Deletion')
+    department_id=fields.Many2one(comodel_name='hr.department')
+    display_name=fields.Char(string='Display Name', size=64, trim=True, )
+    effective_hours=fields.Float(string='Effective Hours')
+    employee_id=fields.Many2one(comodel_name='hr.employee')
+    end_datetime=fields.Date(string='End Date')
+    forecast_hours=fields.Float(string='Forecast Hours')
+    is_assigned_to_me=fields.Boolean(string='Is This Shift Assigned To The Current User')
+    is_past=fields.Boolean(string='Is This Shift In The Past?')
+    is_published=fields.Boolean(string='Is The Shift Sent')
+    manager_id=fields.Many2one(comodel_name='Manager')
+    # ~ name=fields.Text(string='Note')
+    order_line_id=fields.Many2one(comodel_name='Sales Order Line')
+    overlap_slot_count=fields.Integer(string='Overlapping Slots')
+    parent_id=fields.Many2one(comodel_name='Parent Task')
+    percentage_hours=fields.Float(string='Progress')
+    planned_hours=fields.Float(string='Initially Planned Hours')
+    previous_template_id=fields.Many2one(comodel_name='Previous Template')
+    project_id=fields.Many2one(comodel_name='Project')
+    publication_warning=fields.Boolean(string='Modified Since Last Publication')
+    recurrency_id=fields.Boolean(string='Recurrency')
+    repeat=fields.Boolean(string='Repeat')
+    repeat_interval=fields.Integer(string='Repeat every')
+    repeat_type=fields.Selection(selection=[('forever','Forever'),('until','Until')],string='Repeat Type')
+    repeat_until=fields.Date(string='Repeat Until')
+    role_id=fields.Many2one(comodel_name='Role')
