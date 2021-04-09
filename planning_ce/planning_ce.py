@@ -7,7 +7,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class ProjectCePlan(models.Model):
+class ProjectCePlanning(models.Model):
     #_name = 'project.task.tasktype'
     #_description = 'Task Stage'
     #_order = 'name'
