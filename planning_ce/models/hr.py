@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import logging
-import uuid
 
 from odoo import api, fields, models, _
 
@@ -29,5 +28,3 @@ class Employee(models.Model):
                 'planning_expand_employee': True,
             },
         }
-
-        # pass

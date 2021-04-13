@@ -15,41 +15,29 @@ from odoo.tools import format_time
 
 _logger = logging.getLogger(__name__)
 
+
 class PlannerCePlanning(models.Model):
     _name = 'planner_ce.planner'
-    #_description = 'Task Stage'
-    #_order = 'name'
-    #__last_update	Last Modified on	datetime​	Base Field 
+    _description = 'Planner'
+
     active = fields.Boolean(string='Active')
-    create_date = fields.Date(string='Created on') # fields.date.add|context_today|end_of|start_of|substract|to_date|to_string|today
-    # create_uid = fields.Many2one(comodel_name='Created by') # domain|context|ondelete="'set null', 'restrict', 'cascade'"|auto_join|delegate
+    create_date = fields.Date(string='Created on')
     display_name = fields.Char(string='Display Name', size=64, trim=True, )
  
     name = fields.Char(string='Name', size=64, trim=True, )
-    # plan_activity_type_ids = fields.Many2many(comodel_name='Activities',string='_') # relation|column1|column2
-    # write_date = fields.Date(string='Last Updated on')
-    # write_uid = fields.Many2one(comodel_name='Last Updated by')
 
 
 class PlannerCePlanningRole(models.Model):
     _name = 'planner_ce.role'
+    _description = 'Planner Role'
 
     name = fields.Char('Name', required=True)
     color = fields.Integer("Color", default=0)
-    date_start = fields.Date(string="Date Start")
-    date_stop = fields.Date(string="Date Stop")
-    # create_date = fields.Date(string='Created on')
-    # create_uid = fields.Many2one(comodel_name='Created by')
-    # display_name = fields.Char(string='Display name', size=64, trim=True, )
-    # employee_ids = fields.Many2many(comodel_name='Employees', string='Employees')
-    # sequence = fields.Integer(string='Sequence')
-    # write_date = fields.Date(string='Last Updated')
-    # write_uid = fields.Many2one(comodel_name='Last Updated')
 
 
 class PlannerCePlanningSlot(models.Model):
     _name = 'planner_ce.slot'
-    _description = 'Planning Shift'
+    _description = 'Planning Slot'
     _order = 'start_datetime,id desc'
     _rec_name = 'name'
     _check_company_auto = True
@@ -101,26 +89,11 @@ class PlannerCePlanningSlot(models.Model):
 
     # template dummy fields (only for UI purpose)
     template_creation = fields.Boolean("Save as a Template", default=False, store=False)
-    # template_creation = fields.Boolean("Save as a Template", default=False, store=False,
-    #                                    inverse='_inverse_template_creation')
-    # template_autocomplete_ids = fields.Many2many('planning.slot.template', store=False,
-    #                                              compute='_compute_template_autocomplete_ids')
-    # template_id = fields.Many2one('planning.slot.template', string='Planning Templates', store=False)
-
-    # Recurring (`repeat_` fields are none stored, only used for UI purpose)
-    # recurrency_id = fields.Many2one('planning.recurrency', readonly=True, index=True, ondelete="set null", copy=False)
 
     repeat = fields.Boolean("Repeat")
     repeat_interval = fields.Integer(string='Repeat every')
     repeat_type = fields.Selection(selection=[('forever', 'Forever'), ('until', 'Until')], string='Repeat Type')
     repeat_until = fields.Date(string='Repeat Until')
-
-    # repeat = fields.Boolean("Repeat", compute='_compute_repeat', inverse='_inverse_repeat')
-    # repeat_interval = fields.Integer("Repeat every", default=1, compute='_compute_repeat', inverse='_inverse_repeat')
-    # repeat_type = fields.Selection([('forever', 'Forever'), ('until', 'Until')], string='Repeat Type',
-    #                                default='forever', compute='_compute_repeat', inverse='_inverse_repeat')
-    # repeat_until = fields.Date("Repeat Until", compute='_compute_repeat', inverse='_inverse_repeat',
-    #                            help="If set, the recurrence stop at that date. Otherwise, the recurrence is applied indefinitely.")
 
     _sql_constraints = [
         ('check_start_date_lower_end_date', 'CHECK(end_datetime > start_datetime)', 'Shift end date should be greater than its start date'),

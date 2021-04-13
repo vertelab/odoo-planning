@@ -21,7 +21,7 @@
 
 {
     'name': 'Planning CE',
-    'version': '13.0.0.2',
+    'version': '13.0.1.3.0',
     'category': 'Project Timeline',
     'description': """
 Using Timeline to plan the work in a team
@@ -39,10 +39,6 @@ More information:
         'views/planning_role_view.xml',
         'views/planning_slot_view.xml',
         'views/hr_view.xml',
-
-        # 'views/planning_ce_view.xml',
        ],
     'installable': True,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

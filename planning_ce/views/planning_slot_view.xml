@@ -33,14 +33,6 @@
                     <sheet string="Shift">
                         <field name="is_assigned_to_me" invisible="1"/>
                         <field name="allow_self_unassign" invisible="1"/>
-<!--                        <group attrs="{'invisible': ['|', ('template_autocomplete_ids', '=', []), ('template_creation', '=', True)]}">-->
-<!--                            <field name="template_id" class="text-break flex-wrap"-->
-<!--                                domain="[['id', 'in', template_autocomplete_ids]]"-->
-<!--                                widget="radio" options="{'horizontal': true}"-->
-<!--                            />-->
-<!--                        </group>-->
-<!--                        <field name="template_autocomplete_ids" invisible="1"/>-->
-<!--                        <field name="recurrency_id" invisible='1'/>-->
                         <group>
                             <group>
                                 <field name="employee_id"/>
@@ -168,7 +160,6 @@
                     thumbnails="{'employee_id': 'image_128'}">
 
                     <field name="allocated_hours"/>
-<!--                    <field name="recurrency_id" />-->
                     <field name="is_published"/>
                     <field name="publication_warning"/>
                     <field name="employee_id"/>
