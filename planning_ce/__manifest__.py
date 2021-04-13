@@ -39,6 +39,7 @@ More information:
         'views/planning_role_view.xml',
         'views/planning_slot_view.xml',
         'views/hr_view.xml',
+        'views/project_view.xml',
        ],
     'installable': True,
 }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_search_form" model="ir.ui.view">
+        <field name="name">project.task.search.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form" />
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <field name="role" />
+            </field>
+            <filter name="company" position="after">
+                <filter string="Role" name="group_role" context="{'group_by': 'role'}" />
+            </filter>
+        </field>
+    </record>
+    <!-- Task -->
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="name">project.task.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field eval="2" name="priority" />
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="role" />
+            </field>
+        </field>
+    </record>
+    <record id="quick_create_task_form" model="ir.ui.view">
+        <field name="name">project.task.form.quick_create</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.quick_create_task_form" />
+        <field name="priority">1000</field>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="role" />
+            </field>
+        </field>
+    </record>
+    <!-- Project Task Kanban View -->
+    <record model="ir.ui.view" id="view_task_kanban">
+        <field name="name">project.task.kanban</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban" />
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <field name="role" />
+            </field>
+        </field>
+    </record>
+    <record id="view_task_tree2" model="ir.ui.view">
+        <field name="name">project.task.tree</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2" />
+        <field eval="2" name="priority" />
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="role" />
+            </field>
+        </field>
+    </record>
+    <record id="project_task_view_tree_activity" model="ir.ui.view">
+        <field name="name">project.task.tree.activity</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.project_task_view_tree_activity" />
+        <field eval="2" name="priority" />
+        <field name="arch" type="xml">
+            <field name="stage_id" position="after">
+                <field name="role" />
+            </field>
+        </field>
+    </record>
+    <record id="view_task_calendar" model="ir.ui.view">
+        <field name="name">project.task.calendar</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_calendar" />
+        <field eval="2" name="priority" />
+        <field name="arch" type="xml">
+            <field name="stage_id" position="after">
+                <field name="role" />
+            </field>
+        </field>
+    </record>
+    <record id="view_project_task_pivot" model="ir.ui.view">
+        <field name="name">project.task.pivot</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_project_task_pivot" />
+        <field eval="2" name="priority" />
+        <field name="arch" type="xml">
+            <field name="stage_id" position="after">
+                <field name="role" type="col" />
+            </field>
+        </field>
+    </record>
+    <record id="view_project_task_graph" model="ir.ui.view">
+        <field name="name">project.task.graph</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_project_task_graph" />
+        <field eval="2" name="priority" />
+        <field name="arch" type="xml">
+            <field name="stage_id" position="after">
+                <field name="role" />
+            </field>
+        </field>
+    </record>
+<!--
+    <record id="project_task_view_activity" model="ir.ui.view">
+        <field name="name">project.task.activity</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_project_task_graph" />
+        <field eval="2" name="priority" />
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <field name="role" />
+            </field>
+        </field>
+    </record>
+-->
+</odoo>
