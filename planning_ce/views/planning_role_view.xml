@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+        <!-- planning.role views -->
+        <record id="planning_ce_role_view_tree" model="ir.ui.view">
+            <field name="name">planning.role.tree</field>
+            <field name="model">planner_ce.role</field>
+            <field name="arch" type="xml">
+                <tree string="Planning Role List" editable="top">
+                    <field name="name"/>
+                    <field name="color" widget="color_picker"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="planning_ce_role_view_form" model="ir.ui.view">
+            <field name="name">planning.role.form</field>
+            <field name="model">planner_ce.role</field>
+            <field name="arch" type="xml">
+                <form string="Planning Role">
+                    <field name="name"/>
+                    <field name="color" widget="color_picker"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="planning_ce_action_roles" model="ir.actions.act_window">
+            <field name="name">Planning Roles</field>
+            <field name="res_model">planner_ce.role</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="planning_ce_menu_settings_role" name="Roles" parent="planning_ce.planning_ce_menu_settings"
+                  sequence="20" action="planning_ce_action_roles" groups="base.group_system"/>
+    </data>
+</odoo>

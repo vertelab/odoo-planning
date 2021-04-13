@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+         <!--
+            Menus
+        -->
+        <menuitem
+            id="planning_ce_menu_root"
+            name="Planning CE"
+            sequence="25"/>
+
+            <menuitem
+                id="planning_ce_menu_schedule"
+                name="Schedule"
+                sequence="30"
+                parent="planning_ce_menu_root"
+            />
+
+            <menuitem
+                id="planning_ce_menu_settings"
+                name="Configuration"
+                parent="planning_ce_menu_root"
+                sequence="50"
+                groups="base.group_system"/>
+
+
+    </data>
+</odoo>

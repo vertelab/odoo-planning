@@ -21,26 +21,24 @@
 
 {
     'name': 'Planning CE',
-    'version': '13.0.0.1',
+    'version': '13.0.1.3.0',
     'category': 'Project Timeline',
     'description': """
 Using Timeline to plan the work in a team
-======================================
+=================================================
 
 More information:
     """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': ['hr', 'project'],
+    'depends': ['hr', 'project', 'sale'],
     'data': [
-        'views/planning_ce_view.xml',
+        'security/ir.model.access.csv',
+        'views/menu.xml',
+        'views/planning_role_view.xml',
+        'views/planning_slot_view.xml',
+        'views/hr_view.xml',
        ],
-    #'external_dependencies': {
-        #'python' : ['bs4'],
-    #},
-    #'demo': #['demo/planning_demo.xml'],
     'installable': True,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
