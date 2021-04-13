@@ -1,0 +1,260 @@
+<odoo>
+    <data>
+        <!-- planning.slot views -->
+        <record id="planning_ce_view_tree" model="ir.ui.view">
+            <field name="name">planner_ce.slot.tree</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <tree string="Shift List">
+                    <field name="employee_id"/>
+                    <field name="role_id"/>
+                    <field name="start_datetime"/>
+                    <field name="end_datetime"/>
+                    <field name="allocated_hours" widget="float_time"/>
+                    <field name="allocated_percentage"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_form" model="ir.ui.view">
+            <field name="name">planner_ce.slot.form</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <form>
+
+                    <div role="alert" class="alert-warning p-3 text-center" attrs="{'invisible': [('overlap_slot_count', '=', 0)]}">
+                        <button name="action_see_overlaping_slots" type="object" class="btn-link">
+                            <field name="overlap_slot_count"/> other shift(s)
+                        </button>
+                        <span class="align-middle">for this employee at the same time.</span>
+                    </div>
+
+                    <sheet string="Shift">
+                        <field name="is_assigned_to_me" invisible="1"/>
+                        <field name="allow_self_unassign" invisible="1"/>
+<!--                        <group attrs="{'invisible': ['|', ('template_autocomplete_ids', '=', []), ('template_creation', '=', True)]}">-->
+<!--                            <field name="template_id" class="text-break flex-wrap"-->
+<!--                                domain="[['id', 'in', template_autocomplete_ids]]"-->
+<!--                                widget="radio" options="{'horizontal': true}"-->
+<!--                            />-->
+<!--                        </group>-->
+<!--                        <field name="template_autocomplete_ids" invisible="1"/>-->
+<!--                        <field name="recurrency_id" invisible='1'/>-->
+                        <group>
+                            <group>
+                                <field name="employee_id"/>
+                                <field name="role_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="start_datetime" string="Start date"/>
+                                <field name="end_datetime" string="End date"/>
+                                <field name="allocated_hours" widget="float_time"/>
+                                <field name="allocated_percentage"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="repeat"/>
+                            <label for="repeat_interval" string="Repeat Every" attrs="{'invisible': [('repeat', '=', False)]}"/>
+                            <div class="o_row" attrs="{'invisible': [('repeat', '=', False)]}">
+                                <field name="repeat_interval" class="oe_inline" nolabel="1"/>
+                                <span>week(s)</span>
+                                <field name="repeat_type" class="oe_inline" nolabel="1" attrs="{'required': [('repeat', '=', True)]}"/>
+                                <field name="repeat_until" class="oe_inline" attrs="{'invisible': [('repeat_type', '!=', 'until')], 'required': [('repeat_type', '=', 'until')]}" nolabel="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <label for="template_creation" class="float-sm-right mr-5"/>
+                        <field name="template_creation" class="float-sm-right"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_form_in_gantt" model="ir.ui.view">
+            <field name="name">planner_ce.slot.form.gantt</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="inherit_id" ref="planning_ce.planning_ce_view_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="after">
+                    <footer>
+                        <field name="publication_warning" invisible="1"/>
+                        <button string="Save" special="save" class="btn btn-primary" close="1"/>
+                        <button string="Publish &amp; Send" type="object" name="action_send" class="btn btn-primary" close="1" attrs="{'invisible': [('employee_id', '=', False)]}"/>
+                        <button string="Publish" type="object" name="action_publish" class="btn btn-primary" close="1"/>
+                        <button name="unlink" string="Delete" type="object" class="btn-secondary" close="1" attrs="{'invisible': [('id', '=', False)]}" confirm="Are you sure you want to do delete this shift?"/>
+                        <button string="Discard" special="cancel" class="btn-secondary" close="1" fullscreen="True"/>
+
+                        <button name="action_self_assign" class="btn btn-primary float-right" type="object" string="I take it" attrs="{'invisible': [('employee_id', '!=', False)]}" close="1"/>
+                        <button name="action_self_unassign" class="btn btn-secondary float-right" type="object" string="I am unavailable" attrs="{'invisible': ['|', ('is_assigned_to_me', '=', False), ('allow_self_unassign', '=', False)]}" close="1"/>
+                    </footer>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_form_quickcreate" model="ir.ui.view">
+            <field name="name">planner_ce.slot.form.quickcreate</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="role_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_search" model="ir.ui.view">
+            <field name="name">planner_ce.slot.search</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="role_id"/>
+                    <field name="employee_id"/>
+                    <filter name="open_shifts" string="Open Shifts" domain="[('employee_id', '=', False)]"/>
+                    <filter name="my_shifts" string="My Shifts" domain="[('user_id', '=', uid)]"/>
+                    <separator/>
+                    <filter name="future" string="Future" domain="[('start_datetime', '>=', time.strftime('%%Y-%%m-%%d 00:00:00'))]" />
+                    <filter name="past" string="Past" domain="[('start_datetime', '&lt;=', time.strftime('%%Y-%%m-%%d 23:59:59'))]" />
+                    <group string="Group By">
+                        <filter name="group_by_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                        <filter name="group_by_role" string="Role" context="{'group_by': 'role_id'}"/>
+                        <filter name="group_by_start_datetime" string="Start Date" context="{'group_by':'start_datetime:day'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_calendar" model="ir.ui.view">
+            <field name="name">planner_ce.slot.calendar</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <calendar string="Planning" date_start="start_datetime" date_stop="end_datetime" color="role_id" form_view_id="%(planning_ce_view_form_quickcreate)d" event_open_popup="true" quick_add="False">
+                    <field name="name"/>
+                    <field name="employee_id" avatar_field="image_128"/>
+                    <field name="role_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_gantt" model="ir.ui.view">
+            <field name="name">planner_ce.slot.gantt</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <gantt
+                    js_class="planning_gantt"
+                    form_view_id="%(planning_ce_view_form_in_gantt)d"
+                    date_start="start_datetime"
+                    date_stop="end_datetime"
+                    default_group_by="employee_id"
+                    default_scale="week"
+                    color="color"
+                    plan="false"
+                    scales="day,week,month"
+                    precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full'}"
+                    decoration-info="not is_published"
+                    decoration-warning="publication_warning and is_published"
+                    decoration-danger="overlap_slot_count > 0"
+                    display_unavailability="1"
+                    thumbnails="{'employee_id': 'image_128'}">
+
+                    <field name="allocated_hours"/>
+<!--                    <field name="recurrency_id" />-->
+                    <field name="is_published"/>
+                    <field name="publication_warning"/>
+                    <field name="employee_id"/>
+                    <field name="overlap_slot_count"/>
+                    <field name="allocated_percentage"/>
+                    <templates>
+                        <div t-name="gantt-popover" class="container-fluid">
+                            <div class="row no-gutters">
+                                <div class="col">
+                                    <ul class="pl-1 mb-0">
+                                        <li><strong>Start Date: </strong> <t t-esc="userTimezoneStartDate.format('YYYY-MM-DD hh:mm:ss A')"/></li>
+                                        <li><strong>Stop Date: </strong> <t t-esc="userTimezoneStopDate.format('YYYY-MM-DD hh:mm:ss A')"/></li>
+                                        <li id="allocated_hours"><strong>Allocated Hours: </strong> <t t-esc="'' + Math.floor(allocated_hours) + ':' + ((allocated_hours % 1) * 60 >= 10 ? (allocated_hours % 1) * 60 : '0'+(allocated_hours % 1) * 60)"/></li>
+                                    </ul>
+                                    <t t-if="publication_warning">
+                                        <br/>
+                                        <span>Some changes were made since this shift was published</span>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </templates>
+                </gantt>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_gantt_inherit" model="ir.ui.view">
+            <field name="name">planner_ce.slot.gantt.inherit</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="inherit_id" ref="planning_ce.planning_ce_view_gantt"/>
+            <field name="arch" type="xml">
+                <xpath expr="//li[@id='allocated_hours']" position="after">
+                    <t t-if="allocated_percentage != 100">
+                        <li><strong>Allocated Time (%): </strong> <t t-esc="Math.round(allocated_percentage)"/></li>
+                    </t>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_pivot" model="ir.ui.view">
+            <field name="name">planner_ce.slot.pivot</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <pivot string="Planning Analysis">
+                    <field name="start_datetime" interval="week" type="col"/>
+                    <field name="allocated_hours" type="measure"/>
+                    <field name="allocated_percentage" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="planning_ce_view_graph" model="ir.ui.view">
+            <field name="name">planner_ce.slot.graph</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <graph string="Planning Analysis" type="bar">
+                    <field name="role_id" type="row"/>
+                    <field name="employee_id" type="col"/>
+                    <field name="allocated_hours" type="measure"/>
+                    <field name="allocated_percentage" type="measure"/>
+                 </graph>
+             </field>
+        </record>
+
+        <record id="planning_ce_action_schedule_by_employee" model="ir.actions.act_window">
+            <field name="name">Planning Schedule</field>
+            <field name="res_model">planner_ce.slot</field>
+            <field name="view_mode">calendar,tree,form,pivot,graph</field>
+            <field name="view_id" ref="planning_ce_view_calendar"/>
+            <field name="context">{'search_default_group_by_employee': 1, 'planning_expand_employee': 1}</field>
+        </record>
+
+            <record id="planning_ce_action_schedule_by_employee_view_gantt" model="ir.actions.act_window.view">
+                <field name="sequence" eval="1"/>
+                <field name="view_mode">gantt</field>
+                <field name="view_id" ref="planning_ce_view_gantt"/>
+                <field name="act_window_id" ref="planning_ce_action_schedule_by_employee"/>
+            </record>
+
+            <menuitem
+                id="planning_ce_menu_schedule_by_employee"
+                name="By Employee"
+                sequence="10"
+                parent="planning_ce_menu_schedule"
+                action="planning_ce_action_schedule_by_employee"/>
+
+
+    </data>
+</odoo>
