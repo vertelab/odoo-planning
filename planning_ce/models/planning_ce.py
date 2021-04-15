@@ -18,7 +18,7 @@ _logger = logging.getLogger(__name__)
 
 
 class ProjectTask(models.Model):
-    _inherit = "report.project.task.user"
+    _inherit = "project.task"
 
     role = fields.Many2one(comodel_name="planner_ce.role",string="Planner Role", help='Role that the project memeber can have to solve this task.')
     
@@ -45,6 +45,7 @@ class PlannerCePlanningSlot(models.Model):
     _name = 'planner_ce.slot'
     _description = 'Planning Slot'
     _order = 'start_datetime,id desc'
+    _inherit = ['portal.mixin', 'mail.thread.cc', 'mail.activity.mixin', 'rating.mixin']
     _rec_name = 'name'
     _check_company_auto = True
 
@@ -57,6 +58,7 @@ class PlannerCePlanningSlot(models.Model):
     def _default_end_datetime(self):
         return fields.Datetime.to_string(datetime.combine(fields.Datetime.now(), datetime.max.time()))
 
+    state = fields.Selection(selection=[('draft','Draft'),('requested','Requested'),('confirmed','Confirmed'),('denied','Denied'),('cancel','Cancel')],string='')   ('Note')
     name = fields.Text('Note')
     employee_id = fields.Many2one('hr.employee', "Employee", default=_default_employee_id,
                                   group_expand='_read_group_employee_id', check_company=True)
