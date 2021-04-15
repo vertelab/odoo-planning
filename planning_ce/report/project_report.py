@@ -14,6 +14,3 @@ class ReportProjectTaskUser(models.Model):
 
     def _group_by(self):
         return super(ReportProjectTaskUser,self)._group_by() + ",\nt.role"
-        
-
- 
