@@ -20,7 +20,37 @@
       <field name="name">planner_ce.slot.form</field>
       <field name="model">planner_ce.slot</field>
       <field name="arch" type="xml">
+          
+<!--
+                    <sheet string="Task">
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-tasks" type="object" name="action_open_parent_task" string="Parent Task" attrs="{'invisible' : [('parent_id', '=', False)]}" groups="project.group_subtask_project"/>
+                        <button name="action_subtask" type="object" class="oe_stat_button" icon="fa-tasks" attrs="{'invisible' : ['|', ('parent_id', '!=', False), ('id', '=', False)]}" context="{'default_user_id': user_id, 'default_parent_id': id, 'default_project_id': subtask_project_id}" groups="project.group_subtask_project">
+                            <field string="Sub-tasks" name="subtask_count" widget="statinfo"/>
+                        </button>
+                        <button name="153" type="action" attrs="{'invisible': [('rating_count', '=', 0)]}" class="oe_stat_button" icon="fa-smile-o" groups="project.group_project_rating">
+                            <field name="rating_count" string="Rating" widget="statinfo"/>
+                        </button>
+                    </div>
+-->
+<!--
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+-->
+          
+          
+          
+          
         <form>
+            <header>
+                        <button name="action_draft" string="Draft" type="object" class="oe_highlight" groups=""/>
+                        <button name="action_request" string="Request" type="object" class="oe_highlight" groups=""/>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" groups=""/>
+                        <button name="action_denied" string="Denied" type="object" class="oe_highlight" groups=""/>
+                        <button name="action_cancel" string="Cancel" type="object" class="oe_highlight" groups=""/>
+        
+                        <field name="state" widget="statusbar" options="{'clickable': '1', }"/>
+                    </header>
+            
           <div role="alert" class="alert-warning p-3 text-center" attrs="{'invisible': [('overlap_slot_count', '=', 0)]}">
             <button name="action_see_overlaping_slots" type="object" class="btn-link">
               <field name="overlap_slot_count" />

@@ -58,7 +58,7 @@ class PlannerCePlanningSlot(models.Model):
     def _default_end_datetime(self):
         return fields.Datetime.to_string(datetime.combine(fields.Datetime.now(), datetime.max.time()))
 
-    state = fields.Selection(selection=[('draft','Draft'),('requested','Requested'),('confirmed','Confirmed'),('denied','Denied'),('cancel','Cancel')],string='')   ('Note')
+    state = fields.Selection(selection=[('draft','Draft'),('requested','Requested'),('confirmed','Confirmed'),('denied','Denied'),('cancel','Cancel')],string='')
     name = fields.Text('Note')
     employee_id = fields.Many2one('hr.employee', "Employee", default=_default_employee_id,
                                   group_expand='_read_group_employee_id', check_company=True)
