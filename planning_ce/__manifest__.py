@@ -32,14 +32,16 @@ More information:
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': ['hr', 'project', 'sale','web_timeline','hr_timesheet'],
+    'depends': ['hr', 'project', 'sale', 'web_timeline', 'hr_timesheet'],
     'data': [
         'security/ir.model.access.csv',
         'views/menu.xml',
         'views/planning_role_view.xml',
         'views/planning_slot_view.xml',
+        'views/planning_report_views.xml',
         'views/hr_view.xml',
         'views/project_view.xml',
+        'wizard/planning_slot_wizard_view.xml',
        ],
     'installable': True,
 }

@@ -8,7 +8,7 @@ import pytz
 import uuid
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError, AccessError
+from odoo.exceptions import UserError, AccessError, ValidationError
 from odoo.osv import expression
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools import format_time
@@ -21,7 +21,8 @@ class ProjectTask(models.Model):
     _inherit = "project.task"
 
     role = fields.Many2one(comodel_name="planner_ce.role",string="Planner Role", help='Role that the project memeber can have to solve this task.')
-    
+
+
 class PlannerCePlanning(models.Model):
     _name = 'planner_ce.planner'
     _description = 'Planner'
@@ -58,10 +59,23 @@ class PlannerCePlanningSlot(models.Model):
     def _default_end_datetime(self):
         return fields.Datetime.to_string(datetime.combine(fields.Datetime.now(), datetime.max.time()))
 
-    state = fields.Selection(selection=[('draft','Draft'),('requested','Requested'),('confirmed','Confirmed'),('denied','Denied'),('cancel','Cancel')],string='')
+    state = fields.Selection(selection=[('draft', 'Draft'),
+                                        ('requested', 'Requested'),
+                                        ('confirmed', 'Confirmed'),
+                                        ('denied', 'Denied'),
+                                        ('cancel', 'Cancel')], string='State', default='draft', tracking=True)
     name = fields.Text('Note')
     employee_id = fields.Many2one('hr.employee', "Employee", default=_default_employee_id,
-                                  group_expand='_read_group_employee_id', check_company=True)
+                                  group_expand='_read_group_employee_id', check_company=True, tracking=True)
+    project_id = fields.Many2one(
+        'project.project', string="Project", store=True,
+        readonly=False, copy=True, check_company=True,
+        domain="[('company_id', '=', company_id)]")
+    task_id = fields.Many2one(
+        'project.task', string="Task", store=True, readonly=False,
+        copy=True, check_company=True,
+        domain="[('company_id', '=', company_id),""('project_id', '=?', project_id)]")
+
     user_id = fields.Many2one('res.users', string="User", related='employee_id.user_id', store=True, readonly=True)
     company_id = fields.Many2one('res.company', string="Company", required=True, default=lambda self: self.env.company)
     role_id = fields.Many2one('planner_ce.role', string="Role")
@@ -167,3 +181,20 @@ class PlannerCePlanningSlot(models.Model):
             else:
                 slot.working_days_count = 0
 
+    def action_request(self):
+        self.state = 'requested'
+
+    def action_confirm(self):
+        self.state = 'confirmed'
+
+    def action_denied(self):
+        self.state = 'denied'
+
+    def action_cancel(self):
+        self.state = 'cancel'
+
+    @api.constrains('task_id', 'project_id')
+    def _check_task_in_project(self):
+        for forecast in self:
+            if forecast.task_id and (forecast.task_id not in forecast.project_id.tasks):
+                raise ValidationError(_("Your task is not in the selected project."))

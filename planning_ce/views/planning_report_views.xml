@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="planning_ce_lot_report_view_pivots" model="ir.ui.view">
+            <field name="name">Pivot</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <pivot string="Planning Analysis">
+                    <field name="start_datetime" interval="month" type="row"/>
+                    <field name="employee_id" type="col"/>
+                    <field name="allocated_hours" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+            <record id="planning_ce_slot_report_view_graph" model="ir.ui.view">
+            <field name="name">planner_ce.slot.report.graph</field>
+            <field name="model">planner_ce.slot</field>
+            <field name="arch" type="xml">
+                <graph string="Planning Analysis" type="bar">
+                    <field name="start_datetime" type="row"/>
+                    <field name="allocated_hours" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+
+        <record id="planning_ce_report_action_analysis" model="ir.actions.act_window">
+            <field name="name">Planning Analysis</field>
+            <field name="res_model">planner_ce.slot</field>
+            <field name="view_mode">pivot,graph,list</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">
+                    No data yet!
+                </p><p>
+                    Create shifts to get statistics.
+                </p>
+            </field>
+        </record>
+
+        <record id="planning_ce_slot_report_action_view_pivot" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="planning_ce_lot_report_view_pivots"/>
+            <field name="act_window_id" ref="planning_ce_report_action_analysis"/>
+        </record>
+
+        <record id="planning_ce_slot_report_action_view_graph" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="planning_ce_slot_report_view_graph"/>
+            <field name="act_window_id" ref="planning_ce_report_action_analysis"/>
+        </record>
+
+        <!-- Filter for graph view -->
+        <record id="planning_ce_filter_by_employee" model="ir.filters">
+            <field name="name">Hours per Employee</field>
+            <field name="model_id">planner_ce.slot</field>
+            <field name="user_id" eval="False"/>
+            <field name="is_default" eval="True"/>
+            <field name="context">{
+                'pivot_measures': ['allocated_hours'],
+                'pivot_column_groupby': ['start_datetime:month'],
+                'pivot_row_groupby': ['employee_id'],
+                'graph_measures': ['allocated_hours'],
+                'graph_column_groupby': ['start_datetime:month'],
+                'graph_row_groupby': ['employee_id']
+            }</field>
+            <field name="action_id" ref="planning_ce_report_action_analysis"/>
+        </record>
+
+        <menuitem
+            id="planning_ce_menu_reporting"
+            name="Reporting"
+            parent="planning_ce.planning_ce_menu_root"
+            sequence="40"/>
+
+        <menuitem
+            id="planning_ce_menu_planning_analysis"
+            name="Planning Analysis"
+            action="planning_ce_report_action_analysis"
+            sequence="10" parent="planning_ce_menu_reporting"/>
+
+    </data>
+</odoo>
