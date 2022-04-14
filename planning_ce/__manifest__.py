@@ -21,7 +21,7 @@
 
 {
     'name': 'Planning CE',
-    'version': '13.0.1.3.0',
+    'version': '14.0.1.1.0',
     'category': 'Project Timeline',
     'description': """
 Using Timeline to plan the work in a team
@@ -31,7 +31,7 @@ More information:
     """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
-    'website': 'http://www.vertel.se',
+    'website': 'https://www.vertel.se',
     'depends': ['hr', 'project', 'sale', 'web_timeline', 'hr_timesheet'],
     'data': [
         'security/ir.model.access.csv',

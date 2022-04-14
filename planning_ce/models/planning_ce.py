@@ -16,7 +16,6 @@ from odoo.tools import format_time
 _logger = logging.getLogger(__name__)
 
 
-
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
@@ -198,3 +197,21 @@ class PlannerCePlanningSlot(models.Model):
         for forecast in self:
             if forecast.task_id and (forecast.task_id not in forecast.project_id.tasks):
                 raise ValidationError(_("Your task is not in the selected project."))
+
+    def action_see_overlapping_slots(self):
+        pass
+
+    def action_send(self):
+        pass
+
+    def action_publish(self):
+        pass
+
+    def unlink(self):
+        pass
+
+    def action_self_assign(self):
+        pass
+
+    def action_self_unassign(self):
+        pass
