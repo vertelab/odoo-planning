@@ -63,22 +63,23 @@ class PlannerCePlanningSlot(models.Model):
                                         ('confirmed', 'Confirmed'),
                                         ('denied', 'Denied'),
                                         ('cancel', 'Cancel')], string='State', default='draft', tracking=True)
-    name = fields.Text('Note')
+    name = fields.Char(string="Planning Name", required=True)
+    note = fields.Text('Note')
     employee_id = fields.Many2one('hr.employee', "Employee", default=_default_employee_id,
                                   group_expand='_read_group_employee_id', check_company=True, tracking=True)
     project_id = fields.Many2one(
         'project.project', string="Project", store=True,
         readonly=False, copy=True, check_company=True,
         domain="[('company_id', '=', company_id)]")
-    task_id = fields.Many2one(
-        'project.task', string="Task", store=True, readonly=False,
-        copy=True, check_company=True,
-        domain="[('company_id', '=', company_id),""('project_id', '=?', project_id)]")
+    # task_id = fields.Many2one(
+    #     'project.task', string="Task", store=True, readonly=False,
+    #     copy=True, check_company=True,
+    #     domain="[('company_id', '=', company_id),""('project_id', '=?', project_id)]")
 
     user_id = fields.Many2one('res.users', string="User", related='employee_id.user_id', store=True, readonly=True)
     company_id = fields.Many2one('res.company', string="Company", required=True, default=lambda self: self.env.company)
-    role_id = fields.Many2one('planner_ce.role', string="Role")
-    color = fields.Integer("Color", related='role_id.color')
+    # role_id = fields.Many2one('planner_ce.role', string="Role")
+    # color = fields.Integer("Color", related='role_id.color')
     was_copied = fields.Boolean("This shift was copied from previous week", default=False, readonly=True)
 
     start_datetime = fields.Datetime("Start Date", required=True, default=_default_start_datetime)
@@ -111,7 +112,7 @@ class PlannerCePlanningSlot(models.Model):
     # template dummy fields (only for UI purpose)
     template_creation = fields.Boolean("Save as a Template", default=False, store=False)
 
-    repeat = fields.Boolean("Repeat")
+    # repeat = fields.Boolean("Repeat")
     repeat_interval = fields.Integer(string='Repeat every')
     repeat_type = fields.Selection(selection=[('forever', 'Forever'), ('until', 'Until')], string='Repeat Type')
     repeat_until = fields.Date(string='Repeat Until')
@@ -192,11 +193,11 @@ class PlannerCePlanningSlot(models.Model):
     def action_cancel(self):
         self.state = 'cancel'
 
-    @api.constrains('task_id', 'project_id')
-    def _check_task_in_project(self):
-        for forecast in self:
-            if forecast.task_id and (forecast.task_id not in forecast.project_id.tasks):
-                raise ValidationError(_("Your task is not in the selected project."))
+    # @api.constrains('task_id', 'project_id')
+    # def _check_task_in_project(self):
+    #     for forecast in self:
+    #         if forecast.task_id and (forecast.task_id not in forecast.project_id.tasks):
+    #             raise ValidationError(_("Your task is not in the selected project."))
 
     def action_see_overlapping_slots(self):
         pass

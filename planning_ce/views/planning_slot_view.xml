@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <tree string="Shift List">
                     <field name="employee_id" />
-                    <field name="role_id" />
+<!--                    <field name="role_id" />-->
                     <field name="start_datetime" />
                     <field name="end_datetime" />
                     <field name="allocated_hours" widget="float_time" />
@@ -41,33 +41,36 @@
                     <sheet string="Shift">
                         <field name="is_assigned_to_me" invisible="1" />
                         <field name="allow_self_unassign" invisible="1" />
+                        <div class="oe_title pr-0">
+                            <h1><field name="name" class="text-truncate" placeholder="Title..." default_focus="1"/></h1>
+                        </div>
                         <group>
                             <group>
                                 <field name="employee_id" />
                                 <field name="project_id" />
-                                <field name="task_id" />
-                                <field name="role_id" />
+<!--                                <field name="task_id" />-->
+<!--                                <field name="role_id" />-->
                                 <field name="company_id" groups="base.group_multi_company" />
                             </group>
                             <group>
                                 <field name="start_datetime" string="Start date" />
-                                <field name="end_datetime" string="End date" />
+                                <field name="end_datetime" string="End date"/>
                                 <field name="allocated_hours" widget="float_time" />
                                 <field name="allocated_percentage" />
                             </group>
                         </group>
+<!--                        <group>-->
+<!--                            <field name="repeat" />-->
+<!--                            <label for="repeat_interval" string="Repeat Every" attrs="{'invisible': [('repeat', '=', False)]}" />-->
+<!--                            <div class="o_row" attrs="{'invisible': [('repeat', '=', False)]}">-->
+<!--                                <field name="repeat_interval" class="oe_inline" nolabel="1" />-->
+<!--                                <span>week(s)</span>-->
+<!--                                <field name="repeat_type" class="oe_inline" nolabel="1" attrs="{'required': [('repeat', '=', True)]}" />-->
+<!--                                <field name="repeat_until" class="oe_inline" attrs="{'invisible': [('repeat_type', '!=', 'until')], 'required': [('repeat_type', '=', 'until')]}" nolabel="1" />-->
+<!--                            </div>-->
+<!--                        </group>-->
                         <group>
-                            <field name="repeat" />
-                            <label for="repeat_interval" string="Repeat Every" attrs="{'invisible': [('repeat', '=', False)]}" />
-                            <div class="o_row" attrs="{'invisible': [('repeat', '=', False)]}">
-                                <field name="repeat_interval" class="oe_inline" nolabel="1" />
-                                <span>week(s)</span>
-                                <field name="repeat_type" class="oe_inline" nolabel="1" attrs="{'required': [('repeat', '=', True)]}" />
-                                <field name="repeat_until" class="oe_inline" attrs="{'invisible': [('repeat_type', '!=', 'until')], 'required': [('repeat_type', '=', 'until')]}" nolabel="1" />
-                            </div>
-                        </group>
-                        <group>
-                            <field name="name" />
+                            <field name="note" />
                         </group>
                         <label for="template_creation" class="float-sm-right mr-5" />
                         <field name="template_creation" class="float-sm-right" />
@@ -107,10 +110,13 @@
                 <form>
                     <sheet>
                         <group>
-                            <field name="employee_id" />
-                            <field name="role_id" />
-                            <field name="company_id" groups="base.group_multi_company" />
                             <field name="name" />
+                            <field name="employee_id" />
+                            <field name="start_datetime" />
+                            <field name="end_datetime" />
+<!--                            <field name="role_id" />-->
+                            <field name="company_id" groups="base.group_multi_company" />
+                            <field name="note" />
                         </group>
                     </sheet>
                 </form>
@@ -121,7 +127,7 @@
             <field name="model">planner_ce.slot</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="role_id" />
+<!--                    <field name="role_id" />-->
                     <field name="employee_id" />
                     <filter name="open_shifts" string="Open Shifts" domain="[('employee_id', '=', False)]" />
                     <filter name="my_shifts" string="My Shifts" domain="[('user_id', '=', uid)]" />
@@ -130,10 +136,10 @@
                     <filter name="past" string="Past" domain="[('start_datetime', '&lt;=', time.strftime('%%Y-%%m-%%d 23:59:59'))]" />
                     <group string="Group By">
                         <filter name="group_by_employee" string="Employee" context="{'group_by': 'employee_id'}" />
-                        <filter name="group_by_role" string="Role" context="{'group_by': 'role_id'}" />
+<!--                        <filter name="group_by_role" string="Role" context="{'group_by': 'role_id'}" />-->
                         <filter name="group_by_start_datetime" string="Start Date" context="{'group_by':'start_datetime:day'}" />
                         <filter name="group_by_project" string="Project" context="{'group_by': 'project_id'}"/>
-                        <filter name="group_by_task" string="Task" context="{'group_by': 'task_id'}"/>
+<!--                        <filter name="group_by_task" string="Task" context="{'group_by': 'task_id'}"/>-->
                     </group>
                 </search>
             </field>
@@ -142,12 +148,12 @@
             <field name="name">planner_ce.slot.calendar</field>
             <field name="model">planner_ce.slot</field>
             <field name="arch" type="xml">
-                <calendar string="Planning" date_start="start_datetime" date_stop="end_datetime" color="role_id" form_view_id="%(planning_ce_view_form_quickcreate)d" event_open_popup="true" quick_add="False">
+                <calendar string="Planning" date_start="start_datetime" date_stop="end_datetime" form_view_id="%(planning_ce_view_form_quickcreate)d" event_open_popup="true" quick_add="False">
                     <field name="name" />
                     <field name="employee_id" avatar_field="image_128" />
-                    <field name="role_id" />
+<!--                    <field name="role_id" />-->
                     <field name="project_id" />
-                    <field name="task_id" />
+<!--                    <field name="task_id" />-->
                 </calendar>
             </field>
         </record>
@@ -222,7 +228,7 @@
             <field name="model">planner_ce.slot</field>
             <field name="arch" type="xml">
                 <graph string="Planning Analysis" type="bar">
-                    <field name="role_id" type="row" />
+<!--                    <field name="role_id" type="row" />-->
                     <field name="employee_id" type="col" />
                     <field name="allocated_hours" type="measure" />
                     <field name="allocated_percentage" type="measure" />
@@ -237,9 +243,9 @@
                 <kanban class="o_kanban_dashboard" sample="1">
                     <field name="name"/>
                     <field name="employee_id"/>
-                    <field name="role_id"/>
+<!--                    <field name="role_id"/>-->
                     <field name="project_id"/>
-                    <field name="task_id"/>
+<!--                    <field name="task_id"/>-->
                     <field name="company_id" groups="base.group_multi_company"/>
                     <field name="start_datetime"/>
                     <field name="end_datetime"/>
@@ -250,10 +256,8 @@
                                     <div class="o_kanban_record_headings">
                                         <div class="o_kanban_record_title">
                                             <div class="o_kanban_record_title mb-2">
-                                                <field name="project_id"/>
-                                                <div class="font-italic font-weight-normal"><field name="task_id"/></div>
+                                                <field name="name"/>
                                             </div>
-                                            <span name="role"><field name="role_id"/></span>
                                         </div>
                                     </div>
                                     <div class="o_dropdown_kanban dropdown">
@@ -273,6 +277,12 @@
                                         -
                                         <field name="end_datetime"/>
                                     </em>
+                                </div>
+                                <div>
+                                    <strong><field name="project_id"/></strong>
+                                </div>
+                                <div>
+                                    Allocated Hours: <field name="allocated_hours"/>
                                 </div>
                                 <div class="o_kanban_record_bottom">
                                     <div class="oe_kanban_bottom_left"/>
