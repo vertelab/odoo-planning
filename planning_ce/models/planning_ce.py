@@ -12,6 +12,7 @@ from odoo.exceptions import UserError, AccessError, ValidationError
 from odoo.osv import expression
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools import format_time
+from functools import partial
 
 _logger = logging.getLogger(__name__)
 
@@ -116,6 +117,18 @@ class PlannerCePlanningSlot(models.Model):
     repeat_interval = fields.Integer(string='Repeat every')
     repeat_type = fields.Selection(selection=[('forever', 'Forever'), ('until', 'Until')], string='Repeat Type')
     repeat_until = fields.Date(string='Repeat Until')
+
+    schema_time = fields.Float(string="Schema Time", compute='_get_schema')
+
+    @api.depends('employee_id')
+    def _get_schema(self):
+        for emp in self:
+            if emp.employee_id:
+                dt_start_date = fields.Datetime.from_string(self.start_datetime)
+                dt_end_date = fields.Datetime.from_string(self.end_datetime)
+                emp.schema_time = emp.employee_id.sudo().contract_id.resource_calendar_id.get_work_duration_data(dt_start_date, dt_end_date, compute_leaves=True)['hours']
+            else:
+                emp.schema_time = False
 
     _sql_constraints = [
         ('check_start_date_lower_end_date', 'CHECK(end_datetime > start_datetime)', 'Shift end date should be greater than its start date'),

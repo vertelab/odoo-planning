@@ -57,6 +57,7 @@
                                 <field name="end_datetime" string="End date"/>
                                 <field name="allocated_hours" widget="float_time" />
                                 <field name="allocated_percentage" />
+                                <field name="schema_time" widget="float_time"/>
                             </group>
                         </group>
 <!--                        <group>-->
