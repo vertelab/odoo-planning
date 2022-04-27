@@ -129,6 +129,8 @@ class PlannerCePlanningSlot(models.Model):
                 if emp.employee_id.contract_ids.filtered(lambda c: c.state == 'open'):
                     emp.schema_time = emp.employee_id.sudo().contract_id.resource_calendar_id.get_work_duration_data(
                         dt_start_date, dt_end_date, compute_leaves=True)['hours']
+                else:
+                    emp.schema_time = False
             else:
                 emp.schema_time = False
 
