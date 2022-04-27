@@ -32,7 +32,7 @@ More information:
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'https://www.vertel.se',
-    'depends': ['hr', 'project', 'sale', 'web_timeline', 'hr_timesheet'],
+    'depends': ['hr', 'project', 'sale', 'web_timeline', 'hr_timesheet', 'hr_contract'],
     'data': [
         'security/ir.model.access.csv',
         'views/menu.xml',
