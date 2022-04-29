@@ -118,7 +118,7 @@ class PlannerCePlanningSlot(models.Model):
     repeat_type = fields.Selection(selection=[('forever', 'Forever'), ('until', 'Until')], string='Repeat Type')
     repeat_until = fields.Date(string='Repeat Until')
 
-    schema_time = fields.Float(string="Schema Time", compute='_get_schema')
+    contract_schema_time = fields.Float(string="Schema Time", compute='_get_schema', store=True)
 
     @api.depends('employee_id')
     def _get_schema(self):
@@ -127,12 +127,12 @@ class PlannerCePlanningSlot(models.Model):
                 dt_start_date = fields.Datetime.from_string(self.start_datetime)
                 dt_end_date = fields.Datetime.from_string(self.end_datetime)
                 if emp.employee_id.contract_ids.filtered(lambda c: c.state == 'open'):
-                    emp.schema_time = emp.employee_id.sudo().contract_id.resource_calendar_id.get_work_duration_data(
+                    emp.contract_schema_time = emp.employee_id.sudo().contract_id.resource_calendar_id.get_work_duration_data(
                         dt_start_date, dt_end_date, compute_leaves=True)['hours']
                 else:
-                    emp.schema_time = False
+                    emp.contract_schema_time = False
             else:
-                emp.schema_time = False
+                emp.contract_schema_time = False
 
     _sql_constraints = [
         ('check_start_date_lower_end_date', 'CHECK(end_datetime > start_datetime)', 'Shift end date should be greater than its start date'),

@@ -57,7 +57,7 @@
                                 <field name="end_datetime" string="End date"/>
                                 <field name="allocated_hours" widget="float_time" />
                                 <field name="allocated_percentage" />
-                                <field name="schema_time" widget="float_time"/>
+                                <field name="contract_schema_time" widget="float_time"/>
                             </group>
                         </group>
 <!--                        <group>-->
@@ -221,6 +221,7 @@
                     <field name="start_datetime" interval="week" type="col" />
                     <field name="allocated_hours" type="measure" />
                     <field name="allocated_percentage" type="measure" />
+                    <field name="contract_schema_time" type="measure" />
                 </pivot>
             </field>
         </record>

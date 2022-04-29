@@ -10,6 +10,7 @@
                     <field name="start_datetime" interval="month" type="row"/>
                     <field name="employee_id" type="col"/>
                     <field name="allocated_hours" type="measure"/>
+                    <field name="contract_schema_time" type="measure"/>
                 </pivot>
             </field>
         </record>
