@@ -1,0 +1,43 @@
+<odoo>
+    <data>
+
+        <record id="bulk_planner_ce_slot_wizard_form" model="ir.ui.view">
+            <field name="name">bulk.planner_ce.slot.wizard</field>
+            <field name="model">bulk.planner_ce.slot.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <label for="project_id"/>
+                    <field name="project_id" style="width:100%"/>
+                    <br/>
+                    <label for="planning_ids"/>
+                    <field name="planning_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="employee_id" />
+                            <field name="start_datetime" />
+                            <field name="end_datetime" />
+                            <field name="allocated_percentage" />
+                            <field name="allocated_hours" />
+                        </tree>
+                    </field>
+                    <footer>
+                        <button string="Plan" name="action_plan" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="bulk_planning_ce_action" model="ir.actions.act_window">
+            <field name="name">Planning Schedule</field>
+            <field name="res_model">bulk.planner_ce.slot.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="bulk_planning_ce_menu" name="Bulk Planning Schedule" sequence="30" parent="planning_ce.planning_ce_menu_root" action="bulk_planning_ce_action" groups="planning_ce.group_planning_ce_manager" />
+
+
+    </data>
+</odoo>

@@ -124,8 +124,8 @@ class PlannerCePlanningSlot(models.Model):
     def _get_schema(self):
         for emp in self:
             if emp.employee_id:
-                dt_start_date = fields.Datetime.from_string(self.start_datetime)
-                dt_end_date = fields.Datetime.from_string(self.end_datetime)
+                dt_start_date = fields.Datetime.from_string(emp.start_datetime)
+                dt_end_date = fields.Datetime.from_string(emp.end_datetime)
                 if emp.employee_id.contract_ids.filtered(lambda c: c.state == 'open'):
                     emp.contract_schema_time = emp.employee_id.sudo().contract_id.resource_calendar_id.get_work_duration_data(
                         dt_start_date, dt_end_date, compute_leaves=True)['hours']
@@ -225,11 +225,57 @@ class PlannerCePlanningSlot(models.Model):
     def action_publish(self):
         pass
 
-    def unlink(self):
-        pass
-
     def action_self_assign(self):
         pass
 
     def action_self_unassign(self):
         pass
+
+
+class PlannerCePlanningSlot(models.Model):
+    _name = 'bulk.planner_ce.slot.wizard'
+    _description = 'Bulk Planning Slot Wizard'
+
+    project_id = fields.Many2one('project.project', string="Project")
+
+    planning_ids = fields.One2many("bulk.planner_ce.slot", "wizard_id", string="Plan Slot")
+
+    def action_plan(self):
+        for item in self.planning_ids:
+            self.env['planner_ce.slot'].create({
+                'name': self.project_id.name,
+                'project_id': self.project_id.id,
+                'employee_id': item.employee_id.id,
+                'start_datetime': item.start_datetime,
+                'end_datetime': item.end_datetime,
+                'allocated_percentage': item.allocated_percentage,
+                'allocated_hours': item.allocated_hours,
+            })
+
+
+
+
+class PlannerCePlanningSlot(models.Model):
+    _name = 'bulk.planner_ce.slot'
+    _description = 'Bulk Planning Slot'
+
+    employee_id = fields.Many2one('hr.employee', "Employee", required=True)
+    start_datetime = fields.Datetime("Start Date", required=True)
+    end_datetime = fields.Datetime("End Date", required=True)
+    allocated_percentage = fields.Float("Allocated Time (%)", default=100,
+                                        help="Percentage of time the employee is supposed to work during the shift.")
+    allocated_hours = fields.Float("Allocated hours", default=0, compute='_compute_allocated_hours', store=True)
+    wizard_id = fields.Many2one('bulk.planner_ce.slot.wizard', string="Planning Wizard")
+
+
+    @api.depends('start_datetime', 'end_datetime', 'employee_id.resource_calendar_id', 'allocated_percentage')
+    def _compute_allocated_hours(self):
+        for slot in self:
+            if slot.start_datetime and slot.end_datetime:
+                percentage = slot.allocated_percentage / 100.0 or 1
+                
+                if slot.employee_id:
+                    slot.allocated_hours = slot.employee_id._get_work_days_data(
+                        slot.start_datetime, slot.end_datetime, compute_leaves=True)['hours'] * percentage
+                else:
+                    slot.allocated_hours = 0.0
