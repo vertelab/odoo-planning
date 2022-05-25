@@ -64,7 +64,7 @@ class PlannerCePlanningSlot(models.Model):
                                         ('confirmed', 'Confirmed'),
                                         ('denied', 'Denied'),
                                         ('cancel', 'Cancel')], string='State', default='draft', tracking=True)
-    name = fields.Char(string="Planning Name", required=True)
+    name = fields.Char(string="Planning Name", related='project_id.name', readonly=False, store=True)
     note = fields.Text('Note')
     employee_id = fields.Many2one('hr.employee', "Employee", default=_default_employee_id,
                                   group_expand='_read_group_employee_id', check_company=True, tracking=True)
@@ -259,13 +259,28 @@ class PlannerCePlanningSlot(models.Model):
     _name = 'bulk.planner_ce.slot'
     _description = 'Bulk Planning Slot'
 
+    @api.depends('week_selection', 'start_datetime')
+    def _compute_end_date(self):
+        for plan in self:
+            if plan.week_selection and plan.start_datetime:
+                plan.end_datetime = plan.start_datetime + timedelta(weeks=int(plan.week_selection))
+            else:
+                plan.end_datetime = False
+    
+    def _inverse_end_date(self):
+        for plan in self:
+            plan.end_datetime = plan.start_datetime
+
     employee_id = fields.Many2one('hr.employee', "Employee", required=True)
     start_datetime = fields.Datetime("Start Date", required=True)
-    end_datetime = fields.Datetime("End Date", required=True)
+    end_datetime = fields.Datetime("End Date", required=True, compute=_compute_end_date, inverse=_inverse_end_date)
     allocated_percentage = fields.Float("Allocated Time (%)", default=100,
                                         help="Percentage of time the employee is supposed to work during the shift.")
     allocated_hours = fields.Float("Allocated hours", default=0, compute='_compute_allocated_hours', store=True)
     wizard_id = fields.Many2one('bulk.planner_ce.slot.wizard', string="Planning Wizard")
+    week_selection = fields.Selection([('1', 'Week 1'), ('2', 'Week 2'), ('3', 'Week 3'), ('4', 'Week 4'), ('5', 'Week 5'), ('6', 'Week 6')], string="Week")
+
+
 
 
     @api.depends('start_datetime', 'end_datetime', 'employee_id.resource_calendar_id', 'allocated_percentage')

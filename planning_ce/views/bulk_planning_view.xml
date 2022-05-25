@@ -13,6 +13,7 @@
                     <field name="planning_ids" nolabel="1">
                         <tree editable="bottom">
                             <field name="employee_id" />
+                            <field name="week_selection" />
                             <field name="start_datetime" />
                             <field name="end_datetime" />
                             <field name="allocated_percentage" />
