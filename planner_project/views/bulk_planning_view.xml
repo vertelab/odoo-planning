@@ -6,13 +6,13 @@
             <field name="model">bulk.planner_ce.slot.wizard</field>
             <field name="arch" type="xml">
                 <form>
-                    <!-- <label for="project_id"/> -->
-                    <!-- <field name="project_id" style="width:100%"/> -->
+                    <label for="project_id"/>
+                    <field name="project_id" style="width:100%"/>
                     <br/>
                     <label for="planning_ids"/>
                     <field name="planning_ids" nolabel="1">
                         <tree editable="bottom">
-                            <field name="employee_id"/>
+                            <field name="employee_id" />
                             <field name="week_selection" />
                             <field name="start_datetime" />
                             <field name="end_datetime" />

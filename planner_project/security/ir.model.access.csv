@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_planner_ce_slot,access_planner_ce_slot,model_planner_ce_slot,base.group_user,1,1,1,1
+access_bulk_planner_slot,access_bulk_planner_slot,model_bulk_planner_slot,base.group_user,1,1,1,1

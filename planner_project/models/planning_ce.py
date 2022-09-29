@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import json
@@ -16,37 +14,40 @@ from functools import partial
 
 _logger = logging.getLogger(__name__)
 
+class ProjectTask(models.Model):
+    _inherit = "project.task"
+
+    # role = fields.Many2one(comodel_name="planner_ce.role",string="Planner Role", help='Role that the project memeber can have to solve this task.')
 
 # class ProjectTask(models.Model):
 #     _inherit = "project.task"
 
-#     role = fields.Many2one(comodel_name="planner_ce.role",string="Planner Role", help='Role that the project memeber can have to solve this task.')
+#     role = fields.Many2one(comodel_name="planner_ce.role", string="Planner Role",
+#                            help='Role that the project memeber can have to solve this task.')
+    
+    @api.model
+    def _read_group_role(self, role, domain, order):
+        """ Always display all roles in task kanban view """
+        raise UserError('role %s' % role)
+        return role.search([], order=order)
 
+class ReportProjectTaskUser(models.Model):
+    _inherit = "report.project.task.user"
 
-class PlannerCePlanning(models.Model):
-    _name = 'planner_ce.planner'
-    _description = 'Planner'
+    role = fields.Many2one(comodel_name="planner_ce.role",string="Planner Role", help='Role that the project memeber can have to solve this task.',readonly=True)
 
-    active = fields.Boolean(string='Active')
-    create_date = fields.Date(string='Created on')
-    display_name = fields.Char(string='Display Name', size=64, trim=True, )
- 
-    name = fields.Char(string='Name', size=64, trim=True, )
+    # def _select(self):
+    #     return super(ReportProjectTaskUser,self)._select() + ",\nt.role as role"
 
-
-class PlannerCePlanningRole(models.Model):
-    _name = 'planner_ce.role'
-    _description = 'Planner Role'
-
-    name = fields.Char('Name', required=True)
-    color = fields.Integer("Color", default=0)
+    # def _group_by(self):
+    #     return super(ReportProjectTaskUser,self)._group_by() + ",\nt.role"
 
 
 class PlannerCePlanningSlot(models.Model):
     _name = 'planner_ce.slot'
     _description = 'Planning Slot'
     _order = 'start_datetime,id desc'
-    _inherit = ['portal.mixin', 'mail.thread.cc', 'mail.activity.mixin']
+    _inherit = ['portal.mixin', 'mail.thread.cc', 'mail.activity.mixin', 'rating.mixin']
     #_inherit = ['mail.thread.cc', 'mail.activity.mixin', 'rating.mixin']
     #_rec_name = 'name'
     _check_company_auto = True
@@ -85,7 +86,6 @@ class PlannerCePlanningSlot(models.Model):
     # color = fields.Integer("Color", related='role_id.color')
     was_copied = fields.Boolean("This shift was copied from previous week", default=False, readonly=True)
 
-    
     start_datetime = fields.Datetime("Start Date", required=True, default=_default_start_datetime)
     end_datetime = fields.Datetime("End Date", required=True, default=_default_end_datetime)
 
@@ -122,14 +122,6 @@ class PlannerCePlanningSlot(models.Model):
     repeat_until = fields.Date(string='Repeat Until')
 
     contract_schema_time = fields.Float(string="Schema Time", compute='_get_schema', store=True)
-
-    @api.depends('start_datetime', 'end_datetime')
-    def compute_slot_size(self):
-        for slot in self:
-            if slot.allocated_hours > 2:
-                slot.split_time = slot.allocated_hours / 2
-
-    split_time = fields.Float(compute=compute_slot_size, store=True, string="Amount off slots")
 
     # @api.depends('employee_id')
     # def _get_schema(self):
@@ -242,51 +234,9 @@ class PlannerCePlanningSlot(models.Model):
     def action_self_unassign(self):
         pass
 
-    @api.model
-    def create(self, vals):
-        res = super().create(vals)
-        for rec in res:
-            vals_list = {
-                'employee_id': rec.employee_id.id,
-                'note': rec.note,
-                'start_datetime':rec.start_datetime,
-                'end_datetime':rec.end_datetime,
-                'allocated_hours':rec.allocated_hours,
-                'allocated_percentage':rec.allocated_percentage,
-                'contract_schema_time': rec.contract_schema_time
-            }
-            index_var = 1
-            while index_var >= rec.split_time:
-                
-                val_id = self.env['planner_ce.slot'].create(vals_list)
-                index_var+=1
-                _logger.error('HELLO!!!!')
-        _logger.error(vals_list)
-        return res
-
-# class PlannerCePlanningSlot(models.Model):
-#     _name = 'bulk.planner_ce.slot.wizard'
-#     _description = 'Bulk Planning Slot Wizard'
-
-#     #Flytta project_id = fields.Many2one('project.project', string="Project")
-
-#     planning_ids = fields.One2many("bulk.planner_ce.slot", "wizard_id", string="Plan Slot")
-
-#     def action_plan(self):
-#         for item in self.planning_ids:
-#             self.env['planner_ce.slot'].create({
-#                 'name': self.project_id.name,
-#                 'project_id': self.project_id.id,
-#                 'employee_id': item.employee_id.id,
-#                 'start_datetime': item.start_datetime,
-#                 'end_datetime': item.end_datetime,
-#                 'allocated_percentage': item.allocated_percentage,
-#                 'allocated_hours': item.allocated_hours,
-#             })
 
 
-
-
+    
 class PlannerCePlanningSlot(models.Model):
     _name = 'bulk.planner_ce.slot'
     _description = 'Bulk Planning Slot'
@@ -326,3 +276,4 @@ class PlannerCePlanningSlot(models.Model):
                         slot.start_datetime, slot.end_datetime, compute_leaves=True)['hours'] * percentage
                 else:
                     slot.allocated_hours = 0.0
+

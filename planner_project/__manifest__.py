@@ -39,27 +39,15 @@ More information:
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-planning',
-    #'depends': ['hr', 'project', 'sale', 'web_timeline', 'hr_timesheet', 'hr_contract'],
-    #sale- behövs inte för den gör inget?
-    #hr_timesheet - inherits och xml fält, vill vi ha kvar den? är för roler
-    #hr- behövs pga employee, samankoplad med hr_contract
-    #hr_contract- smankoplad med hr, funkar utan? NOPPE
-    #web_timeline- behövs för visalusering och date_start/date_stop
-    #project- behövs pga att vi behöver(?) projekt för att göra planering?
-    'depends': ['hr', 'web_timeline', 'portal', 'hr_contract', 'hr_timesheet'],
+    'depends': ['project'],
     'data': [
-        'security/security.xml',
-        'security/ir.model.access.csv',
-        'views/menu.xml',
-        'views/planning_role_view.xml',
-        'views/planning_slot_view.xml',
-        'views/planning_report_views.xml',
-        'views/hr_view.xml',
-        'views/project_view.xml',
+        # 'views/project_view.xml',
+        #'views/planning_slot_view.xml',
         #'views/bulk_planning_view.xml',
-        #'wizard/planning_slot_wizard_view.xml',
-       ],
-    'installable': True,
+        'security/ir.model.access.csv',
+        'wizard/project_button_wizard.xml',
+    ],
+    'auto_install': True,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

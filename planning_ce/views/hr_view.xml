@@ -17,6 +17,6 @@
             </field>
         </record>
 
-        <menuitem id="menu_hr_planning" name="Planning" parent="hr.menu_hr_root" groups="hr.group_hr_user" sequence="3" action="planning_ce.planning_ce_action_schedule_by_employee"/>
+        <!-- <menuitem id="menu_hr_planning" name="Planning" parent="hr.menu_hr_root" groups="hr.group_hr_user" sequence="3" action="planning_ce.planning_ce_action_schedule_by_employee"/> -->
     </data>
 </odoo>
