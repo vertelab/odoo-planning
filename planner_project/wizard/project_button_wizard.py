@@ -189,7 +189,8 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
             else:
                 index_var = 1
                 while index_var < rec.split_time:
-                    rec.compute_split_start()
+                    # rec.compute_split_start()
+                    # vals_list =
                     val_id = self.env['planner_ce.slot'].create(vals_list)
                     
                     index_var+=1
