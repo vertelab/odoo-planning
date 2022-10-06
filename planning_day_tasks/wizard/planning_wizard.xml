@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- <record id="planner_wizard_button" model="ir.actions.act_window">
+            <field name="name">Project Task Planner Button</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">planner.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record> -->
+
+        <record id="planner_wizard" model="ir.ui.view">
+            <field name="name">planner_wizard.form.view</field>
+            <field name="model">planner.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Set date for task">
+                    <sheet>
+                        <group>
+                            <field name="user_id" readonly="1"/>
+                            <field name="date"/>
+                            <field name="planned_hours" readonly="1"/>
+                            <field name="remaining_hours" readonly="1"/>
+                            <field name="task" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="planner_view_form" model="ir.ui.view">
+            <field name="name">project.task.view.form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button
+                        name="planner_wizard_object"
+                        string="Plan Task"
+                        type="object"
+                        class="btn-primary"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

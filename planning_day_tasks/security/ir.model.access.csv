@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_planning_day_tasks_day_plan,planning_day_tasks.day_plan,planning_day_tasks.model_day_plan,base.group_user,1,1,1,1
+access_planning_day_tasks_planner_wizard,planning_day_tasks.planner_wizard,planning_day_tasks.model_planner_wizard,base.group_user,1,1,1,1
