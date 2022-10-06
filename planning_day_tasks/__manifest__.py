@@ -40,8 +40,10 @@
     'depends': ['project', 'hr', 'hr_timesheet'],
     'data': [
         'security/ir.model.access.csv',
+        'views/assets.xml',
         'views/day_plan.xml',
-        'wizard/planning_wizard.xml'
+        'views/activity_view.xml',
+        'wizard/planning_wizard.xml',
     ]
 }
 
