@@ -43,7 +43,7 @@
         'views/assets.xml',
         'views/day_plan.xml',
         'views/activity_view.xml',
-        'wizard/planning_wizard.xml',
+        # 'wizard/planning_wizard.xml',
     ]
 }
 

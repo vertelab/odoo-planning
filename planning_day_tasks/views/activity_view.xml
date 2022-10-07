@@ -7,8 +7,8 @@
                 <kanban default_group_by="date_deadline:day" class="o_kanban_dashboard o_kanban_small_column" sample="1" create="false">
                     <field name="user_id"/>
                     <field name="date_deadline"/>
-                    <field name="planned_hours_test"/>
-                    <progressbar field="state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}' sum_field="planned_hours_test"/>
+                    <field name="planned_hours" widget="float_time"/>
+                    <progressbar field="state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}' sum_field="planned_hours"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_card oe_kanban_global_click">
@@ -26,6 +26,10 @@
                                             <span>
                                                 <i class="fa fa-calendar" role="img" aria-label="Date" title="Date"/>
                                                 <t t-esc="record.date_deadline.value"/>
+                                            </span>
+                                            <span>
+                                                Planned:
+                                                <field name="planned_hours" widget="float_time"/>
                                             </span>
                                         </div>
                                     </div>
@@ -66,13 +70,23 @@
                 <xpath expr="//group[last()]" position="after">
                     <group attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
                         <group>
-                            <field name="planned_hours"/>
-                        </group>
-                        <group>
-                            <field name="planned_hours_test"/>
-<!--                            <field name="remaining_hours"/>-->
+                            <field name="planned_hours" widget="float_time"/>
                         </group>
                     </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mail_activity_view_search" model="ir.ui.view">
+            <field name="name">mail.activity.form</field>
+            <field name="model">mail.activity</field>
+            <field name="inherit_id" ref="mail.mail_activity_view_search"/>
+            <field name="arch" type="xml">
+                <field name="activity_type_id" position="after">
+                    <field name="user_id"/>
+                </field>
+                <xpath expr="//filter[last()]" position="after">
+                    <filter string="My Activities" name="my_activities" domain="[('user_id', '=', uid)]"/>
                 </xpath>
             </field>
         </record>
@@ -83,7 +97,7 @@
             <field name="res_model">mail.activity</field>
             <field name="view_mode">kanban,tree,form,calendar</field>
             <field name="domain">[('res_model', '=', 'project.task')]</field>
-            <field name="context">{'search_default_my_tasks': 1}</field>
+            <field name="context">{'search_default_my_activities': 1}</field>
             <field name="search_view_id" ref="mail.mail_activity_view_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

@@ -17,14 +17,7 @@ class Activities(models.Model):
     def _inverse_hours(self):
         pass
 
-    planned_hours = fields.Float(string="Planned Hours", compute=_set_hours, inverse=_inverse_hours, store=True)
-
-    planned_hours_test = fields.Integer(default=10)
-
-    expected_revenue = fields.Monetary('Expected Revenue', currency_field='company_currency', tracking=True, default=10000)
-
-    company_currency = fields.Many2one("res.currency", string='Currency', default=lambda self: self.env.company.currency_id,
-                                       readonly=True)
+    planned_hours = fields.Float('Planned Hours', tracking=True, compute=_set_hours, inverse=_inverse_hours, store=True)
 
     def action_view_activity_tasks(self):
         return {
@@ -35,3 +28,18 @@ class Activities(models.Model):
             'res_id': self.res_id,
             'views': [[False, 'form']]
         }
+
+    @api.model
+    def create(self, values):
+        res = super(Activities, self).create(values)
+
+        day_plan_id = self.env['day.plan'].search([
+            ('user_id', '=', res.user_id.id),
+            ('date', '=', res.date_deadline)
+        ], limit=1)
+
+        if not day_plan_id:
+            self.env['day.plan'].create({
+                'user_id': res.user_id.id, 'date': res.date_deadline
+            })
+        return res
