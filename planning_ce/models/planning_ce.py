@@ -65,10 +65,11 @@ class PlannerCePlanningSlot(models.Model):
                                         ('confirmed', 'Confirmed'),
                                         ('denied', 'Denied'),
                                         ('cancel', 'Cancel')], string='State', default='draft', tracking=True)
-    #Flytta till projekt name = fields.Char(string="Planning Name", related='project_id.name', readonly=False, store=True)
+    name = fields.Char(string="Planning Name", related='project_id.name', readonly=False, store=True)
     note = fields.Text('Note')
     employee_id = fields.Many2one('hr.employee', "Employee", default=_default_employee_id,
                                   group_expand='_read_group_employee_id', check_company=True, tracking=True)
+    project_id = fields.Many2one('project.project', string="Project")
     # contract_ids = fields.One2many('hr.contract','employee_id', string='Employee Contracts')
     #Flytta till projekt  project_id = fields.Many2one(
     #    'project.project', string="Project", store=True,
@@ -242,27 +243,27 @@ class PlannerCePlanningSlot(models.Model):
     def action_self_unassign(self):
         pass
 
-    @api.model
-    def create(self, vals):
-        res = super().create(vals)
-        for rec in res:
-            vals_list = {
-                'employee_id': rec.employee_id.id,
-                'note': rec.note,
-                'start_datetime':rec.start_datetime,
-                'end_datetime':rec.end_datetime,
-                'allocated_hours':rec.allocated_hours,
-                'allocated_percentage':rec.allocated_percentage,
-                'contract_schema_time': rec.contract_schema_time
-            }
-            index_var = 1
-            while index_var >= rec.split_time:
+    # @api.model
+    # def create(self, vals):
+    #     res = super().create(vals)
+    #     for rec in res:
+    #         vals_list = {
+    #             'employee_id': rec.employee_id.id,
+    #             'note': rec.note,
+    #             'start_datetime':rec.start_datetime,
+    #             'end_datetime':rec.end_datetime,
+    #             'allocated_hours':rec.allocated_hours,
+    #             'allocated_percentage':rec.allocated_percentage,
+    #             'contract_schema_time': rec.contract_schema_time
+    #         }
+    #         index_var = 1
+    #         while index_var >= rec.split_time:
                 
-                val_id = self.env['planner_ce.slot'].create(vals_list)
-                index_var+=1
-                _logger.error('HELLO!!!!')
-        _logger.error(vals_list)
-        return res
+    #             val_id = self.env['planner_ce.slot'].create(vals_list)
+    #             index_var+=1
+    #             _logger.error('HELLO!!!!')
+    #     _logger.error(vals_list)
+    #     return res
 
 # class PlannerCePlanningSlot(models.Model):
 #     _name = 'bulk.planner_ce.slot.wizard'
@@ -311,7 +312,7 @@ class PlannerCePlanningSlot(models.Model):
     allocated_hours = fields.Float("Allocated hours", default=0, compute='_compute_allocated_hours', store=True)
     wizard_id = fields.Many2one('bulk.planner_ce.slot.wizard', string="Planning Wizard")
     week_selection = fields.Selection([('1', 'Week 1'), ('2', 'Week 2'), ('3', 'Week 3'), ('4', 'Week 4'), ('5', 'Week 5'), ('6', 'Week 6')], string="Week")
-
+    
 
 
 

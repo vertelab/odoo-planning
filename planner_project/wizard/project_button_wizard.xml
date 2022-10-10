@@ -22,18 +22,15 @@
                         <field name="project_id"></field>
                     </h1>
                     <group name="planning_wizard_list">
-                        <field name="employee_id" string="Employee" />
+                        <field name="employee_ids" string="Employee" widget="many2many_tags"/>
                         <field name="start_datetime" string="Start time"/>
-                        <!-- <field name="working_hours"/> -->
                         <field name="end_datetime" string="End time"/>
-                        <field name="allocated_hours"/>
-                        <field name="allocated_percentage"/>
                         <field name="working_days_count"/>
-                        <!-- <field name="project_hours"/> -->
-                        <field name="split_time"/>
-                        <!-- <field name="test"/> -->
                         <field name="note"/>
                     </group>
+                    <footer>
+                        <button name="create_slots" type="object">Create slots</button>
+                    </footer>
                 </form>
             </field>
         </record>
