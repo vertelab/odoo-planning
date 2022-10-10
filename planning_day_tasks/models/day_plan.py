@@ -25,21 +25,6 @@ class DayPlan(models.Model):
             else:
                 record.planned_hours = 0
 
-    # @api.onchange('task_ids')  # TODO: What happens if the task estimated time change?!
-    # def _compute_remaining_hours(self):
-    #     for record in self:
-    #         hours = 0
-    #         for task in self.task_ids:
-    #             hours = hours + task.remaining_hours
-    #         record.remaining_hours = hours
-
-    # @api.onchange('date')
-    # def _compute_day(self):
-    #     for record in self:
-    #         _logger.warning(f"{date.strftime(record.date, '%Y-%m-%d')=}")
-    #         record.colum_date = date.strftime(record.date, "%Y-%m-%d")
-    #         _logger.warning(f"{record.colum_date=}")
-
     user_id = fields.Many2one('res.users', string='User')
     date = fields.Date('Date')
     task_ids = fields.One2many('project.task', 'assigned_user', string='Tasks')
