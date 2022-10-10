@@ -19,35 +19,32 @@
 #
 ##############################################################################
 
+# TODO: Fix module image!
+
 {
-    'name': 'Planning: CE',
+    'name': 'Planning: Day Tasks',
     'version': '14.0.1.1.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
     'summary': '',
-    'category': 'Project',
+    'category': 'Administration',
     'description': """
-Using Timeline to plan the work in a team
-=================================================
-
-More information:
     """,
     #'sequence': '1',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-planning/planning_ce',
+    'website': 'https://vertel.se/apps/odoo-planning/planning_day_tasks',
     'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-planning',
-    'depends': ['project'],
+    'depends': ['project', 'hr', 'hr_timesheet'],
     'data': [
-        # 'views/project_view.xml',
-        #'views/planning_slot_view.xml',
-        #'views/bulk_planning_view.xml',
         'security/ir.model.access.csv',
-        'wizard/project_button_wizard.xml',
-    ],
-    'auto_install': True,
+        'views/assets.xml',
+        'views/day_plan.xml',
+        'views/activity_view.xml',
+        # 'wizard/planning_wizard.xml',
+    ]
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
