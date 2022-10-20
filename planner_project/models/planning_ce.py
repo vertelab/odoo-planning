@@ -259,6 +259,7 @@ class PlannerCePlanningSlot(models.Model):
     allocated_percentage = fields.Float("Allocated Time (%)", default=100,
                                         help="Percentage of time the employee is supposed to work during the shift.")
     allocated_hours = fields.Float("Allocated hours", default=0, compute='_compute_allocated_hours', store=True)
+    #wizard_id might not be used? Cant find bulk.planer_ce.slot.wizard
     wizard_id = fields.Many2one('bulk.planner_ce.slot.wizard', string="Planning Wizard")
     week_selection = fields.Selection([('1', 'Week 1'), ('2', 'Week 2'), ('3', 'Week 3'), ('4', 'Week 4'), ('5', 'Week 5'), ('6', 'Week 6')], string="Week")
 
