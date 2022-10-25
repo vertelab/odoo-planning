@@ -91,11 +91,9 @@
                     <group string="Recent Activities" attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
                         <field name="recent_user_activity_ids" nolabel="1">
                             <tree>
-                                <field name="activity_type_id"/>
-                                <field name="summary"/>
                                 <field name="user_id"/>
-                                <field name="planned_hours"/>
-                                <field name="date_deadline"/>
+                                <field name="planned_hours" sum="Total"/>
+                                <field name="date"/>
                             </tree>
                         </field>
                     </group>

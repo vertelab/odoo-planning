@@ -77,9 +77,9 @@ class Activities(models.Model):
     def _get_recent_activities(self):
         for rec in self:
             if rec.user_id:
-                activity_ids = self.env['mail.activity'].search([
+                activity_ids = self.env['day.plan'].search([
                     ('user_id', '=', rec.user_id.id),
-                    ('res_model', '=', 'project.task'),
+                    # ('res_model', '=', 'project.task'),
                     ])
                 if activity_ids:
                     rec.recent_user_activity_ids = activity_ids.ids
@@ -88,7 +88,7 @@ class Activities(models.Model):
             else:
                 rec.recent_user_activity_ids = False
 
-    recent_user_activity_ids = fields.Many2many("mail.activity", string="Recent Activities",
+    recent_user_activity_ids = fields.Many2many("day.plan", string="Recent Activities",
                                                 compute=_get_recent_activities)
 
     @api.depends('planned_hours')
