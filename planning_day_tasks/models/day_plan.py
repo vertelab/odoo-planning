@@ -29,6 +29,7 @@ class DayPlan(models.Model):
     date = fields.Date('Date')
     task_ids = fields.One2many('project.task', 'assigned_user', string='Tasks')
     planned_hours = fields.Float('Planned Hours', compute=_compute_planned_hours)
+    activity_type_id = fields.Many2one('mail.activity.type')
 
     # remaining_hours = fields.Float('Remaining Hours', compute=_compute_remaining_hours)
     # colum_date = fields.Char('Column Sort by Date', store=True, compute=_compute_day)
