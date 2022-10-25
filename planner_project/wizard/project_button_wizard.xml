@@ -23,9 +23,9 @@
                     </h1>
                     <group name="planning_wizard_list">
                         <field name="employee_ids" string="Employee" widget="many2many_tags"/>
-                        <field name="start_datetime" string="Start time"/>
-                        <field name="end_datetime" string="End time"/>
-                        <field name="working_days_count"/>
+                        <field name="start_datetime" string="Start time" widget="date"/>
+                        <field name="end_datetime" string="End time" widget="date"/>
+                        <field name="hours_per_week" widget="float_time" string="Work time"/>
                         <field name="note"/>
                     </group>
                     <footer>
