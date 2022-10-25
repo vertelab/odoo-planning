@@ -32,7 +32,6 @@ class Project(models.Model):
                 "view_id":view_id,
                 "res_id":self.env["bulk.planner.slot"].create({'project_id': self.id}).id,
             }
-        _logger.error(f"{self.name}")
         return action
 
 
@@ -91,12 +90,10 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
        
             closest_work_end = schedule._get_closest_work_time(start_dt, match_end=True, search_range=[start_dt, end_dt])
             closest_work = schedule._get_closest_work_time(start_dt, match_end=False, search_range=[start_dt, end_dt])
-            _logger.error(f"{start_dt}")
-            _logger.error(f"{end_dt}")
+
             closest_work_end = closest_work_end.astimezone(pytz.utc) if closest_work_end else None
             closest_work = closest_work.astimezone(pytz.utc) if closest_work else None
-            _logger.error(f"{closest_work}")
-            _logger.error(f"{closest_work_end}")
+
             return [closest_work, closest_work_end]
 
     def split_times(self):
@@ -164,14 +161,16 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
 
                     if closest_work == None or closest_work_end == None:
                         break
+
                     closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
                 
                 #Counts out the remaining time that is 2 hours or les
                 if delta_work_time >= timedelta(seconds=1):
                     closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
+
                     time_to_end =  delta_work_time
 
-                    start_dt_no_tz = start_dt.replace(tzinfo=None)
+                    start_dt_no_tz = closest_work.replace(tzinfo=None)
                     vals = [{
                         'name': self.project_id.name,
                         'employee_id': employee.id,
