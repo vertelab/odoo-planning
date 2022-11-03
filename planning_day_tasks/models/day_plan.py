@@ -14,7 +14,6 @@ class Task(models.Model):
 
 class DayPlan(models.Model):
     _name = "day.plan"
-    _inherit = 'mail.activity'
     _description = "Daily Planner"
     _rec_name = 'date'
 
