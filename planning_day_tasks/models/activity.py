@@ -1,9 +1,23 @@
 from odoo import models, fields, api, _
-from datetime import date
+from datetime import date, timedelta
 
 
 class Activities(models.Model):
     _inherit = 'mail.activity'
+
+    @api.depends("res_model")
+    def _compute_project_details(self):
+        for rec in self:
+            if rec.res_model == 'project.task':
+                task_id = self.env[rec.res_model].browse(rec.res_id)
+                rec.project_id = task_id.project_id.id
+                rec.project_date_deadline = task_id.date_deadline
+            else:
+                rec.project_id = False
+                rec.project_date_deadline = False
+
+    project_id = fields.Many2one("project.project", string="Project", compute=_compute_project_details)
+    project_date_deadline = fields.Date(string="Project Date Deadline", compute=_compute_project_details)
 
     @api.depends("res_model")
     def _set_hours(self):
@@ -73,14 +87,16 @@ class Activities(models.Model):
         self.recalculate_planned_hours_for_task()
         return res
 
-    @api.depends('user_id')
+    @api.depends('user_id', 'date_deadline')
     def _get_recent_activities(self):
         for rec in self:
-            if rec.user_id:
+            if rec.user_id or rec.date_deadline:
                 activity_ids = self.env['day.plan'].search([
                     ('user_id', '=', rec.user_id.id),
                     # ('res_model', '=', 'project.task'),
-                    ])
+                    ('date', '>=', rec.date_deadline),
+                    ('date', '<=', rec.date_deadline + timedelta(days=5)),
+                ])
                 if activity_ids:
                     rec.recent_user_activity_ids = activity_ids.ids
                 else:
@@ -119,3 +135,18 @@ class Activities(models.Model):
                 rec.task_id = self.env[rec.res_model].browse(rec.res_id).id
             else:
                 rec.task_id = False
+
+    def write(self, vals):
+        res = super(Activities, self).write(vals)
+        if self.res_model == 'project.task' and vals.get("user_id"):
+            task_id = self.env[self.res_model].browse(self.res_id)
+            task_id.write({"user_id": self.user_id.id})
+        return res
+
+    @api.model
+    def create(self, vals):
+        res = super(Activities, self).create(vals)
+        if res.res_model == 'project.task' and res.user_id:
+            task_id = self.env[res.res_model].browse(res.res_id)
+            task_id.write({"user_id": res.user_id.id})
+        return res
