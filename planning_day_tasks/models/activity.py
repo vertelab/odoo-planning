@@ -70,17 +70,21 @@ class Activities(models.Model):
     @api.model
     def create(self, values):
         res = super(Activities, self).create(values)
-        res.recalculate_planned_hours_for_task()
-        day_plan_id = self.env['day.plan'].search([
+        if res.res_model == 'project.task' and res.user_id:
+            task_id = self.env[res.res_model].browse(res.res_id)
+            task_id.write({"user_id": res.user_id.id})
+
+            res.recalculate_planned_hours_for_task()
+            day_plan_id = self.env['day.plan'].search([
             ('user_id', '=', res.user_id.id),
             ('date', '=', res.date_deadline)
-        ], limit=1)
-
-        if not day_plan_id:
-            self.env['day.plan'].create({
+            ], limit=1)
+            if not day_plan_id:
+               self.env['day.plan'].create({
                 'user_id': res.user_id.id, 'date': res.date_deadline
-            })
+               })
         return res
+
 
     def write(self, values):
         res = super(Activities, self).write(values)
@@ -143,10 +147,10 @@ class Activities(models.Model):
             task_id.write({"user_id": self.user_id.id})
         return res
 
-    @api.model
-    def create(self, vals):
-        res = super(Activities, self).create(vals)
-        if res.res_model == 'project.task' and res.user_id:
-            task_id = self.env[res.res_model].browse(res.res_id)
-            task_id.write({"user_id": res.user_id.id})
-        return res
+    #@api.model
+    #def create(self, vals):
+    #    res = super(Activities, self).create(vals)
+    #    if res.res_model == 'project.task' and res.user_id:
+    #        task_id = self.env[res.res_model].browse(res.res_id)
+    #        task_id.write({"user_id": res.user_id.id})
+    #    return res
