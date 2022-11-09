@@ -44,6 +44,7 @@
         'views/day_plan.xml',
         'views/activity_view.xml',
         'views/task_view.xml',
+        'data/cron.xml',
         # 'wizard/planning_wizard.xml',
     ]
 }

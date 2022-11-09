@@ -115,6 +115,9 @@
                 </field>
                 <xpath expr="//filter[last()]" position="after">
                     <filter string="My Activities" name="my_activities" domain="[('user_id', '=', uid)]"/>
+                    <filter string="Previous Day Activities" name="previous_day_activities" domain="[('date_deadline', '=', ((context_today()-relativedelta(days=1)).strftime('%Y-%m-%d')))]"/>
+                    <filter string="Today Activities" name="today_activities" domain="[('date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Next Day Activities" name="next_day_activities" domain="[('date_deadline', '=', ((context_today()+relativedelta(days=1)).strftime('%Y-%m-%d')))]"/>
                 </xpath>
             </field>
         </record>
@@ -138,7 +141,7 @@
             <field name="res_model">mail.activity</field>
             <field name="view_mode">kanban,tree,form,calendar,pivot</field>
             <field name="domain">[('res_model', '=', 'project.task')]</field>
-            <field name="context">{'search_default_my_activities': 1}</field>
+            <field name="context">{'search_default_my_activities': 1, 'search_default_previous_day_activities': 1, 'search_default_today_activities': 1, 'search_default_next_day_activities': 1}</field>
             <field name="search_view_id" ref="mail.mail_activity_view_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

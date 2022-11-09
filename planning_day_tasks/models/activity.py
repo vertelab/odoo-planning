@@ -1,4 +1,4 @@
-from odoo import models, fields, api, _
+from odoo import models, fields, api, _, SUPERUSER_ID
 from datetime import date, timedelta
 
 
@@ -150,3 +150,12 @@ class Activities(models.Model):
             task_id = self.env[res.res_model].browse(res.res_id)
             task_id.write({"user_id": res.user_id.id})
         return res
+
+    def _cleanup_due_tasks(self):
+        present_date = date.today()
+        activity_ids = self.env['mail.activity'].search([('res_model', '=', 'project.task')])
+        for activity in activity_ids:
+            over_due_date = activity.date_deadline + timedelta(days=2)
+            if over_due_date == present_date:
+                activity.unlink()
+
