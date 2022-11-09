@@ -1,4 +1,4 @@
-from odoo import models, fields, api, _, SUPERUSER_ID
+from odoo import models, fields, api, _
 from datetime import date, timedelta
 
 
