@@ -182,7 +182,7 @@
         <menuitem name="Tasks" id="project.menu_project_management" parent="project.menu_main_pm"
                 action="project.action_view_all_task" sequence="3" groups="base.group_no_one,project.group_project_user"/>
                 
-        <menuitem action="project.open_view_project_all" id="project.menu_projects" name="Projects" parent="menu_main_pm" sequence="3"/>
+        <menuitem action="project.open_view_project_all" id="project.menu_projects" name="Projects" parent="project.menu_main_pm" sequence="3"/>
 
     </data>
 </odoo>
