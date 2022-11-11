@@ -154,7 +154,7 @@
         </record>
 
         <menuitem name="All Daily Activities" id="menu_task_planned_activities" parent="project.menu_main_pm"
-                action="planning_day_tasks.action_view_all_planned_activities" sequence="5" groups="project.group_project_manager"/>
+                action="planning_day_tasks.action_view_all_planned_activities" sequence="1" groups="project.group_project_manager"/>
                 
                 
                 
@@ -177,6 +177,12 @@
         </record>
 
         <menuitem name="My Daily Activities" id="menu_task_my_planned_activities" parent="project.menu_main_pm"
-                action="planning_day_tasks.action_view_my_planned_activities" sequence="5" groups="project.group_project_user"/>
+                action="planning_day_tasks.action_view_my_planned_activities" sequence="1" groups="project.group_project_user"/>
+        
+        <menuitem name="Tasks" id="project.menu_project_management" parent="project.menu_main_pm"
+                action="project.action_view_all_task" sequence="3" groups="base.group_no_one,project.group_project_user"/>
+                
+        <menuitem action="project.open_view_project_all" id="project.menu_projects" name="Projects" parent="menu_main_pm" sequence="3"/>
+
     </data>
 </odoo>
