@@ -27,6 +27,11 @@
                                                 Planned:
                                                 <field name="planned_hours" widget="float_time"/>
                                             </span>
+                                            <br />
+                                            <span>
+                                                Stage:
+                                                <field name="stage_id"/>
+                                            </span>
                                         </div>
                                         <div class="o_dropdown_kanban dropdown" t-if="!selection_mode" groups="base.group_user">
                                             <a role="button" class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
@@ -56,7 +61,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="oe_clear"></div>
+                                <div class="oe_clear"/>
                             </div>
                        </t>
                     </templates>
@@ -96,8 +101,9 @@
                         <field name="recent_user_activity_ids" nolabel="1">
                             <tree>
                                 <field name="user_id"/>
-                                <field name="planned_hours"  widget="float_time" sum="Total"/>
                                 <field name="date"/>
+                                <field name="date_weekday"/>
+                                <field name="planned_hours"  widget="float_time" sum="Total"/>
                             </tree>
                         </field>
                     </group>
@@ -154,6 +160,6 @@
         </record>
 
         <menuitem name="Daily Activities" id="menu_task_planned_activities" parent="project.menu_main_pm"
-                action="planning_day_tasks.action_view_all_planned_activities" sequence="5" groups="base.group_no_one,project.group_project_user"/>
+                action="planning_day_tasks.action_view_all_planned_activities" sequence="5" groups="base.group_no_one,project.group_project_user,"/>
     </data>
 </odoo>

@@ -1,9 +1,12 @@
 from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 from datetime import date, timedelta
 
 
 class Activities(models.Model):
     _inherit = 'mail.activity'
+
+    active = fields.Boolean(string="Active", default=True)
 
     @api.depends("res_model")
     def _compute_project_details(self):
@@ -24,7 +27,7 @@ class Activities(models.Model):
         for rec in self:
             if rec.res_model == 'project.task':
                 task_id = self.env[rec.res_model].browse(rec.res_id)
-                rec.planned_hours = task_id.planned_hours
+                rec.planned_hours = max(task_id.remaining_hours, 0)
             else:
                 rec.planned_hours = 0
 
@@ -32,6 +35,17 @@ class Activities(models.Model):
         pass
 
     planned_hours = fields.Float('Planned Hours', tracking=True, compute=_set_hours, inverse=_inverse_hours, store=True)
+
+    @api.depends("res_model")
+    def _set_stage(self):
+        for rec in self:
+            if rec.res_model == 'project.task':
+                task_id = self.env[rec.res_model].browse(rec.res_id)
+                rec.stage_id = task_id.stage_id.id
+            else:
+                rec.stage_id = False
+
+    stage_id = fields.Many2one('project.task.type', string='Project Stage', compute=_set_stage)
 
     def action_view_activity_tasks(self):
         return {
@@ -70,6 +84,8 @@ class Activities(models.Model):
     @api.model
     def create(self, values):
         res = super(Activities, self).create(values)
+        if values.get('planned_hours') <= 0:
+            raise UserError(_("You cannot planned zero hours"))
         if res.res_model == 'project.task' and res.user_id:
             task_id = self.env[res.res_model].browse(res.res_id)
             task_id.write({"user_id": res.user_id.id})
@@ -153,3 +169,10 @@ class Activities(models.Model):
             over_due_date = activity.date_deadline + timedelta(days=2)
             if over_due_date == present_date:
                 activity.unlink()
+            project_task = self.env['project.task'].browse(activity.res_id)
+            if project_task.stage_id.is_closed:
+                project_task.activity_ids.unlink()
+
+        if day_plan := self.env['day.plan'].search([]):
+            if not day_plan.activity_ids:
+                day_plan.unlink()

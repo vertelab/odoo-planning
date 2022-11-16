@@ -1,26 +1,26 @@
 <odoo>
     <data>
-        <record id="view_project_task_from" model="ir.ui.view">
-            <field name="name">project.task.form</field>
-            <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_form2"/>
-            <field name="arch" type="xml">
-                <field name="planned_hours" position="after">
-                    <field name="activity_planned_time"/>
-                </field>
-            </field>
-        </record>
+<!--        <record id="view_project_task_from" model="ir.ui.view">-->
+<!--            <field name="name">project.task.form</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="project.view_task_form2"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="planned_hours" position="after">-->
+<!--                    <field name="activity_planned_time"/>-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
 
-        <record id="view_project_task_pivot" model="ir.ui.view">
-            <field name="name">project.task.pivot</field>
-            <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_project_task_pivot"/>
-            <field name="arch" type="xml">
-                <field name="project_id" position="after">
-                    <field name="activity_planned_time" type="measure"/>
-                </field>
-            </field>
-        </record>
+<!--        <record id="view_project_task_pivot" model="ir.ui.view">-->
+<!--            <field name="name">project.task.pivot</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="project.view_project_task_pivot"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="project_id" position="after">-->
+<!--                    <field name="activity_planned_time" type="measure"/>-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
 
         <record id="view_task_search_form" model="ir.ui.view">
             <field name="name">project.task.search.form</field>
@@ -50,7 +50,10 @@
         </record>
 
         <menuitem name="Unplanned Tasks" id="menu_unplanned_project_management" parent="project.menu_main_pm"
-            action="action_view_unplanned_task" sequence="2" groups="base.group_no_one,project.group_project_user"/>
+            action="action_view_unplanned_task" sequence="2" groups="project.group_project_manager"/>
+
+        <menuitem name="Tasks" id="project.menu_project_management" parent="project.menu_main_pm"
+            action="project.action_view_all_task" sequence="2" groups="project.group_project_manager"/>
 
     </data>
 </odoo>

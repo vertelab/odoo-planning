@@ -17,3 +17,9 @@ class Tasks(models.Model):
         if vals.get("user_id"):
             self.activity_ids.filtered(lambda activity: activity.user_id != self.user_id).unlink()
         return res
+
+    @api.onchange('stage_id')
+    def clean_activities(self):
+        if self.stage_id.is_closed and self.activity_ids:
+            self.activity_ids.write({'active': False})
+
