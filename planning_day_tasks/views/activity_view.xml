@@ -143,11 +143,11 @@
 
 
         <record id="action_view_all_planned_activities" model="ir.actions.act_window">
-            <field name="name">Daily Activities</field>
+            <field name="name">All Daily Activities</field>
             <field name="res_model">mail.activity</field>
             <field name="view_mode">kanban,tree,form,calendar,pivot</field>
             <field name="domain">[('res_model', '=', 'project.task')]</field>
-            <field name="context">{'search_default_my_activities': 1, 'search_default_previous_day_activities': 1, 'search_default_today_activities': 1, 'search_default_next_day_activities': 1}</field>
+            <field name="context">{'search_default_previous_day_activities': 1, 'search_default_today_activities': 1, 'search_default_next_day_activities': 1}</field>
             <field name="search_view_id" ref="mail.mail_activity_view_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -159,7 +159,28 @@
             </field>
         </record>
 
-        <menuitem name="Daily Activities" id="menu_task_planned_activities" parent="project.menu_main_pm"
-                action="planning_day_tasks.action_view_all_planned_activities" sequence="5" groups="base.group_no_one,project.group_project_user,"/>
+        <menuitem name="All Daily Activities" id="menu_task_planned_activities" parent="project.menu_main_pm"
+                action="planning_day_tasks.action_view_all_planned_activities" sequence="1" groups="project.group_project_manager"/>
+                
+
+        <record id="action_view_my_planned_activities" model="ir.actions.act_window">
+            <field name="name">My Daily Activities</field>
+            <field name="res_model">mail.activity</field>
+            <field name="view_mode">kanban,tree,form,calendar,pivot</field>
+            <field name="domain">[('res_model', '=', 'project.task'),('user_id', '=', uid)]</field>
+            <field name="context">{'search_default_previous_day_activities': 1, 'search_default_today_activities': 1, 'search_default_next_day_activities': 1}</field>
+            <field name="search_view_id" ref="mail.mail_activity_view_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No activity found. Let's create one!
+                </p><p>
+                     To get things done, use activities and status on tasks.<br/>
+                    Chat in real time or by email to collaborate efficiently.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="My Daily Activities" id="menu_task_my_planned_activities" parent="project.menu_main_pm"
+                action="planning_day_tasks.action_view_my_planned_activities" sequence="1" groups="project.group_project_user"/>
     </data>
 </odoo>

@@ -53,7 +53,9 @@
             action="action_view_unplanned_task" sequence="2" groups="project.group_project_manager"/>
 
         <menuitem name="Tasks" id="project.menu_project_management" parent="project.menu_main_pm"
-            action="project.action_view_all_task" sequence="2" groups="project.group_project_manager"/>
+            action="project.action_view_all_task" sequence="3" groups="project.group_project_manager"/>
+
+        <menuitem action="project.open_view_project_all" id="project.menu_projects" name="Projects" parent="project.menu_main_pm" sequence="3"/>
 
     </data>
 </odoo>
