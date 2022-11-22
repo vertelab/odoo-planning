@@ -15,6 +15,7 @@ class DayPlan(models.Model):
     _name = "day.plan"
     _description = "Daily Planner"
     _rec_name = 'date'
+    _order = 'user_id, date'
 
     @api.depends('activity_ids')  # TODO: What happens if the activity_ids is updated!
     def _compute_planned_hours(self):

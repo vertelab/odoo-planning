@@ -5,6 +5,7 @@ from datetime import date, timedelta
 
 class Activities(models.Model):
     _inherit = 'mail.activity'
+    _order = 'stage_id, date_deadline'
 
     active = fields.Boolean(string="Active", default=True)
 
