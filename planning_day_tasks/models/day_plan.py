@@ -1,9 +1,8 @@
 from odoo import api, fields, models, _
 import logging
+from datetime import date
 
 _logger = logging.getLogger(__name__)
-# import datetime
-from datetime import date
 
 
 class Task(models.Model):
@@ -16,6 +15,7 @@ class DayPlan(models.Model):
     _name = "day.plan"
     _description = "Daily Planner"
     _rec_name = 'date'
+    _order = 'user_id, date'
 
     @api.depends('activity_ids')  # TODO: What happens if the activity_ids is updated!
     def _compute_planned_hours(self):
@@ -29,9 +29,6 @@ class DayPlan(models.Model):
     date = fields.Date('Date')
     task_ids = fields.One2many('project.task', 'assigned_user', string='Tasks')
     planned_hours = fields.Float('Planned Hours', compute=_compute_planned_hours)
-
-    # remaining_hours = fields.Float('Remaining Hours', compute=_compute_remaining_hours)
-    # colum_date = fields.Char('Column Sort by Date', store=True, compute=_compute_day)
 
     @api.depends('user_id', 'date')
     def _set_activity_users(self):
@@ -50,3 +47,13 @@ class DayPlan(models.Model):
 
     activity_ids = fields.Many2many('mail.activity', 'daily_planner_activity_rel', string='Mail Activity',
                                     readonly=True, compute=_set_activity_users)
+
+    @api.depends('date')
+    def _set_week_day(self):
+        for rec in self:
+            if rec.date:
+                rec.date_weekday = rec.date.strftime('%A')
+            else:
+                rec.date_weekday = False
+
+    date_weekday = fields.Char('Week Day', compute=_set_week_day)

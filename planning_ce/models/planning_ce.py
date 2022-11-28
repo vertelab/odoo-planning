@@ -30,7 +30,7 @@ class PlannerCePlanning(models.Model):
     active = fields.Boolean(string='Active')
     create_date = fields.Date(string='Created on')
     display_name = fields.Char(string='Display Name', size=64, trim=True, )
- 
+
     name = fields.Char(string='Name', size=64, trim=True, )
 
 
@@ -47,8 +47,8 @@ class PlannerCePlanningSlot(models.Model):
     _description = 'Planning Slot'
     _order = 'start_datetime,id desc'
     _inherit = ['portal.mixin', 'mail.thread.cc', 'mail.activity.mixin']
-    #_inherit = ['mail.thread.cc', 'mail.activity.mixin', 'rating.mixin']
-    #_rec_name = 'name'
+    # _inherit = ['mail.thread.cc', 'mail.activity.mixin', 'rating.mixin']
+    # _rec_name = 'name'
     _check_company_auto = True
 
     def _default_employee_id(self):
@@ -71,7 +71,7 @@ class PlannerCePlanningSlot(models.Model):
                                   group_expand='_read_group_employee_id', check_company=True, tracking=True)
     project_id = fields.Many2one('project.project', string="Project")
     # contract_ids = fields.One2many('hr.contract','employee_id', string='Employee Contracts')
-    #Flytta till projekt  project_id = fields.Many2one(
+    # Flytta till projekt  project_id = fields.Many2one(
     #    'project.project', string="Project", store=True,
     #    readonly=False, copy=True, check_company=True,
     #    domain="[('company_id', '=', company_id)]")
@@ -86,7 +86,6 @@ class PlannerCePlanningSlot(models.Model):
     # color = fields.Integer("Color", related='role_id.color')
     was_copied = fields.Boolean("This shift was copied from previous week", default=False, readonly=True)
 
-    
     start_datetime = fields.Datetime("Start Date", required=True, default=_default_start_datetime)
     end_datetime = fields.Datetime("End Date", required=True, default=_default_end_datetime)
 
@@ -147,7 +146,8 @@ class PlannerCePlanningSlot(models.Model):
     #             emp.contract_schema_time = False
 
     _sql_constraints = [
-        ('check_start_date_lower_end_date', 'CHECK(end_datetime > start_datetime)', 'Shift end date should be greater than its start date'),
+        ('check_start_date_lower_end_date', 'CHECK(end_datetime > start_datetime)',
+         'Shift end date should be greater than its start date'),
         ('check_allocated_hours_positive', 'CHECK(allocated_hours >= 0)', 'You cannot have negative shift'),
     ]
 
@@ -158,7 +158,8 @@ class PlannerCePlanningSlot(models.Model):
 
     def _read_group_employee_id(self, employees, domain, order):
         if self._context.get('planning_expand_employee'):
-            return self.env['planner_ce.slot'].search([('create_date', '>', datetime.now() - timedelta(days=30))]).mapped('employee_id')
+            return self.env['planner_ce.slot'].search(
+                [('create_date', '>', datetime.now() - timedelta(days=30))]).mapped('employee_id')
         return employees
 
     @api.depends('start_datetime', 'end_datetime', 'employee_id')
@@ -182,7 +183,8 @@ class PlannerCePlanningSlot(models.Model):
     @api.depends('start_datetime', 'end_datetime')
     def _compute_allocation_type(self):
         for slot in self:
-            if slot.start_datetime and slot.end_datetime and (slot.end_datetime - slot.start_datetime).total_seconds() / 3600.0 < 24:
+            if slot.start_datetime and slot.end_datetime and (
+                    slot.end_datetime - slot.start_datetime).total_seconds() / 3600.0 < 24:
                 slot.allocation_type = 'planning'
             else:
                 slot.allocation_type = 'forecast'
@@ -193,7 +195,8 @@ class PlannerCePlanningSlot(models.Model):
             if slot.start_datetime and slot.end_datetime:
                 percentage = slot.allocated_percentage / 100.0 or 1
                 if slot.allocation_type == 'planning' and slot.start_datetime and slot.end_datetime:
-                    slot.allocated_hours = (slot.end_datetime - slot.start_datetime).total_seconds() * percentage / 3600.0
+                    slot.allocated_hours = (
+                                                       slot.end_datetime - slot.start_datetime).total_seconds() * percentage / 3600.0
                 else:
                     if slot.employee_id:
                         slot.allocated_hours = slot.employee_id._get_work_days_data(
@@ -206,7 +209,8 @@ class PlannerCePlanningSlot(models.Model):
         for slot in self:
             if slot.employee_id:
                 slot.working_days_count = \
-                slot.employee_id._get_work_days_data(slot.start_datetime, slot.end_datetime, compute_leaves=True)['days']
+                    slot.employee_id._get_work_days_data(slot.start_datetime, slot.end_datetime, compute_leaves=True)[
+                        'days']
             else:
                 slot.working_days_count = 0
 
@@ -258,12 +262,13 @@ class PlannerCePlanningSlot(models.Model):
     #         }
     #         index_var = 1
     #         while index_var >= rec.split_time:
-                
+
     #             val_id = self.env['planner_ce.slot'].create(vals_list)
     #             index_var+=1
     #             _logger.error('HELLO!!!!')
     #     _logger.error(vals_list)
     #     return res
+
 
 # class PlannerCePlanningSlot(models.Model):
 #     _name = 'bulk.planner_ce.slot.wizard'
@@ -286,8 +291,6 @@ class PlannerCePlanningSlot(models.Model):
 #             })
 
 
-
-
 class PlannerCePlanningSlot(models.Model):
     _name = 'bulk.planner_ce.slot'
     _description = 'Bulk Planning Slot'
@@ -299,7 +302,7 @@ class PlannerCePlanningSlot(models.Model):
                 plan.end_datetime = plan.start_datetime + timedelta(weeks=int(plan.week_selection))
             else:
                 plan.end_datetime = False
-    
+
     def _inverse_end_date(self):
         for plan in self:
             plan.end_datetime = plan.start_datetime
@@ -311,17 +314,16 @@ class PlannerCePlanningSlot(models.Model):
                                         help="Percentage of time the employee is supposed to work during the shift.")
     allocated_hours = fields.Float("Allocated hours", default=0, compute='_compute_allocated_hours', store=True)
     wizard_id = fields.Many2one('bulk.planner_ce.slot.wizard', string="Planning Wizard")
-    week_selection = fields.Selection([('1', 'Week 1'), ('2', 'Week 2'), ('3', 'Week 3'), ('4', 'Week 4'), ('5', 'Week 5'), ('6', 'Week 6')], string="Week")
-    
-
-
+    week_selection = fields.Selection(
+        [('1', 'Week 1'), ('2', 'Week 2'), ('3', 'Week 3'), ('4', 'Week 4'), ('5', 'Week 5'), ('6', 'Week 6')],
+        string="Week")
 
     @api.depends('start_datetime', 'end_datetime', 'employee_id.resource_calendar_id', 'allocated_percentage')
     def _compute_allocated_hours(self):
         for slot in self:
             if slot.start_datetime and slot.end_datetime:
                 percentage = slot.allocated_percentage / 100.0 or 1
-                
+
                 if slot.employee_id:
                     slot.allocated_hours = slot.employee_id._get_work_days_data(
                         slot.start_datetime, slot.end_datetime, compute_leaves=True)['hours'] * percentage

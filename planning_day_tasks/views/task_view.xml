@@ -1,25 +1,61 @@
 <odoo>
     <data>
-        <record id="view_project_task_from" model="ir.ui.view">
-            <field name="name">project.task.form</field>
+<!--        <record id="view_project_task_from" model="ir.ui.view">-->
+<!--            <field name="name">project.task.form</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="project.view_task_form2"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="planned_hours" position="after">-->
+<!--                    <field name="activity_planned_time"/>-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="view_project_task_pivot" model="ir.ui.view">-->
+<!--            <field name="name">project.task.pivot</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="project.view_project_task_pivot"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="project_id" position="after">-->
+<!--                    <field name="activity_planned_time" type="measure"/>-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="view_task_search_form" model="ir.ui.view">
+            <field name="name">project.task.search.form</field>
             <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="inherit_id" ref="project.view_task_search_form"/>
             <field name="arch" type="xml">
-                <field name="planned_hours" position="after">
-                    <field name="activity_planned_time"/>
-                </field>
+                <filter name="unassigned" position="after">
+                    <filter string="Unplanned Tasks" name="unplanned_tasks" domain="[('activity_ids', '=', False)]"/>
+                </filter>
             </field>
         </record>
 
-        <record id="view_project_task_pivot" model="ir.ui.view">
-            <field name="name">project.task.pivot</field>
-            <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_project_task_pivot"/>
-            <field name="arch" type="xml">
-                <field name="project_id" position="after">
-                    <field name="activity_planned_time" type="measure"/>
-                </field>
+        <record id="action_view_unplanned_task" model="ir.actions.act_window">
+            <field name="name">Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
+            <field name="context">{'search_default_unplanned_tasks': 1}</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No tasks found. Let's create one!
+                </p><p>
+                    To get things done, use activities and status on tasks.<br/>
+                    Chat in real time or by email to collaborate efficiently.
+                </p>
             </field>
         </record>
+
+        <menuitem name="Unplanned Tasks" id="menu_unplanned_project_management" parent="project.menu_main_pm"
+            action="action_view_unplanned_task" sequence="2" groups="project.group_project_manager"/>
+
+        <menuitem name="Tasks" id="project.menu_project_management" parent="project.menu_main_pm"
+            action="project.action_view_all_task" sequence="3" groups="project.group_project_manager"/>
+
+        <menuitem action="project.open_view_project_all" id="project.menu_projects" name="Projects" parent="project.menu_main_pm" sequence="3"/>
+
     </data>
 </odoo>

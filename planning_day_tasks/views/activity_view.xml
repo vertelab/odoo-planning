@@ -27,6 +27,11 @@
                                                 Planned:
                                                 <field name="planned_hours" widget="float_time"/>
                                             </span>
+                                            <br />
+                                            <span>
+                                                Stage:
+                                                <field name="stage_id"/>
+                                            </span>
                                         </div>
                                         <div class="o_dropdown_kanban dropdown" t-if="!selection_mode" groups="base.group_user">
                                             <a role="button" class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
@@ -56,7 +61,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="oe_clear"></div>
+                                <div class="oe_clear"/>
                             </div>
                        </t>
                     </templates>
@@ -86,16 +91,19 @@
                         <group>
                             <field name="planned_hours" widget="float_time"/>
                             <field name="task_user_id" invisible="1"/>
+                            <field name="project_date_deadline"/>
+                        </group>
+                        <group>
+                            <field name="project_id"/>
                         </group>
                     </group>
                     <group string="Recent Activities" attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
                         <field name="recent_user_activity_ids" nolabel="1">
                             <tree>
-                                <field name="activity_type_id"/>
-                                <field name="summary"/>
                                 <field name="user_id"/>
-                                <field name="planned_hours"/>
-                                <field name="date_deadline"/>
+                                <field name="date"/>
+                                <field name="date_weekday"/>
+                                <field name="planned_hours"  widget="float_time" sum="Total"/>
                             </tree>
                         </field>
                     </group>
@@ -113,6 +121,9 @@
                 </field>
                 <xpath expr="//filter[last()]" position="after">
                     <filter string="My Activities" name="my_activities" domain="[('user_id', '=', uid)]"/>
+                    <filter string="Previous Day Activities" name="previous_day_activities" domain="[('date_deadline', '=', ((context_today()-relativedelta(days=1)).strftime('%Y-%m-%d')))]"/>
+                    <filter string="Today Activities" name="today_activities" domain="[('date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Next Day Activities" name="next_day_activities" domain="[('date_deadline', '=', ((context_today()+relativedelta(days=1)).strftime('%Y-%m-%d')))]"/>
                 </xpath>
             </field>
         </record>
@@ -132,11 +143,11 @@
 
 
         <record id="action_view_all_planned_activities" model="ir.actions.act_window">
-            <field name="name">Daily Activities</field>
+            <field name="name">All Daily Activities</field>
             <field name="res_model">mail.activity</field>
             <field name="view_mode">kanban,tree,form,calendar,pivot</field>
             <field name="domain">[('res_model', '=', 'project.task')]</field>
-            <field name="context">{'search_default_my_activities': 1}</field>
+            <field name="context">{'search_default_previous_day_activities': 1, 'search_default_today_activities': 1, 'search_default_next_day_activities': 1}</field>
             <field name="search_view_id" ref="mail.mail_activity_view_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -148,7 +159,28 @@
             </field>
         </record>
 
-        <menuitem name="Daily Activities" id="menu_task_planned_activities" parent="project.menu_main_pm"
-                action="planning_day_tasks.action_view_all_planned_activities" sequence="5" groups="base.group_no_one,project.group_project_user"/>
+        <menuitem name="All Daily Activities" id="menu_task_planned_activities" parent="project.menu_main_pm"
+                action="planning_day_tasks.action_view_all_planned_activities" sequence="1" groups="project.group_project_manager"/>
+                
+
+        <record id="action_view_my_planned_activities" model="ir.actions.act_window">
+            <field name="name">My Daily Activities</field>
+            <field name="res_model">mail.activity</field>
+            <field name="view_mode">kanban,tree,form,calendar,pivot</field>
+            <field name="domain">[('res_model', '=', 'project.task'),('user_id', '=', uid)]</field>
+            <field name="context">{'search_default_previous_day_activities': 1, 'search_default_today_activities': 1, 'search_default_next_day_activities': 1}</field>
+            <field name="search_view_id" ref="mail.mail_activity_view_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No activity found. Let's create one!
+                </p><p>
+                     To get things done, use activities and status on tasks.<br/>
+                    Chat in real time or by email to collaborate efficiently.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="My Daily Activities" id="menu_task_my_planned_activities" parent="project.menu_main_pm"
+                action="planning_day_tasks.action_view_my_planned_activities" sequence="1" groups="project.group_project_user"/>
     </data>
 </odoo>

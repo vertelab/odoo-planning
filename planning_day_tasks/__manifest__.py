@@ -37,13 +37,14 @@
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-planning',
-    'depends': ['project', 'hr', 'hr_timesheet'],
+    'depends': ['project', 'hr', 'hr_timesheet', "calendar"],
     'data': [
         'security/ir.model.access.csv',
         'views/assets.xml',
         'views/day_plan.xml',
         'views/activity_view.xml',
         'views/task_view.xml',
+        'data/cron.xml',
         # 'wizard/planning_wizard.xml',
     ]
 }
