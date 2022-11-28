@@ -43,6 +43,7 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
 
     def _default_start_datetime(self):
         return fields.Datetime.to_string(datetime.combine(fields.Datetime.now(), datetime.min.time()))
+        
 
     @api.depends('start_datetime')
     def _default_end_datetime(self):

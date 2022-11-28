@@ -39,7 +39,7 @@
                         <span class="align-middle">for this employee at the same time.</span>
                     </div>
                     <sheet string="Shift">
-                        <field name="is_assigned_to_me" invisible="1" />
+                        <!-- <field name="is_assigned_to_me" invisible="1" /> -->
                         <field name="allow_self_unassign" invisible="1" />
                         <div class="oe_title pr-0">
                             <!-- <h1><field name="name" class="text-truncate" placeholder="Title..." default_focus="1"/></h1> -->

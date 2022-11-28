@@ -39,7 +39,10 @@ More information:
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-planning',
-    'depends': ['project'],
+    'depends': [
+        'project',
+        'planning_ce',
+        ],
     'data': [
         # 'views/project_view.xml',
         #'views/planning_slot_view.xml',
