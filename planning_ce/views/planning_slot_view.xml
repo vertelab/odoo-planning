@@ -99,7 +99,7 @@
                         <button name="unlink" string="Delete" type="object" class="btn-secondary" close="1" attrs="{'invisible': [('id', '=', False)]}" confirm="Are you sure you want to do delete this shift?" />
                         <button string="Discard" special="cancel" class="btn-secondary" close="1" fullscreen="True" />
                         <button name="action_self_assign" class="btn btn-primary float-right" type="object" string="I take it" attrs="{'invisible': [('employee_id', '!=', False)]}" close="1" />
-                        <button name="action_self_unassign" class="btn btn-secondary float-right" type="object" string="I am unavailable" attrs="{'invisible': ['|', ('is_assigned_to_me', '=', False), ('allow_self_unassign', '=', False)]}" close="1" />
+                        <!-- <button name="action_self_unassign" class="btn btn-secondary float-right" type="object" string="I am unavailable" attrs="{'invisible': ['|', ('is_assigned_to_me', '=', False), ('allow_self_unassign', '=', False)]}" close="1" /> -->
                     </footer>
                 </xpath>
             </field>

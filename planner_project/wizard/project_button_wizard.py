@@ -72,7 +72,7 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
     project_id = fields.Many2one(comodel_name="project.project", string="Project", store=True, readonly=True)
     name = fields.Char(string="Planning Name", related='project_id.name', readonly=False, store=True)
     note = fields.Text("Note")
-    hours_per_week = fields.Float(String="Work time")
+    hours_per_week = fields.Float(string="Work time")
     #Might be used in the futcher
     # week_selection = fields.Selection([('1', 'Week 1'), ('2', 'Week 2'), ('3', 'Week 3'), ('4', 'Week 4'), ('5', 'Week 5'), ('6', 'Week 6')], string="Week", default='1')
     
@@ -118,62 +118,64 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                 start_dt = self.start_datetime.replace(tzinfo=utc)
                 end_dt = self.end_datetime.replace(tzinfo=utc)
                 time_delta = end_dt - start_dt
-
-                if delta_work_time < timedelta(hours = work_time):
+                closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
+                if timedelta(hours=work_time) > timedelta(hours=result):
                     raise UserError(_("The work time is more then the emplyee contracted time betwen start and end time, pleas change the work time."))
                 closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
 
                 #Might not be neded, maby trigers when the users have holiday?
                 if closest_work == None and closest_work_end == None:
                     raise UserError(_("The times you have chosen dose not contain any work time, please chose new times."))
-
                 while end_dt > closest_work:
                     if closest_work > start_dt:
                         start_dt = closest_work
                     while delta_work_time > timedelta(seconds=7200) and closest_work == start_dt or closest_work_end > start_dt + timedelta(hours=2):
-
+                        closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
+                        
                         #Takes away the timezone so it can be used in vals
                         start_dt_no_tz = start_dt.replace(tzinfo=None)
 
                         #7200 seconds is 2 hours, if its more then 2 hours take away
                         if delta_work_time > timedelta(seconds=7200):
                             delta_work_time -= timedelta(seconds=7200)
+
                         else:
                             #If it's les break out off the second while loop
                             break
                         vals = [{
-                            'name': self.project_id.name,
+                            'project_id': self.project_id.id,
                             'employee_id': employee.id,
                             'note': self.note,
                             'start_datetime':start_dt_no_tz,
                             'end_datetime': start_dt_no_tz + timedelta(hours=2),
                             'contract_schema_time': self.contract_schema_time
                             }]
-                        self.env['planner_ce.slot'].create(vals)
+                        tmp = self.env['planner_ce.slot'].create(vals)
                         start_dt += timedelta(hours=2)
                         time_delta = end_dt - start_dt
-
-                        if start_dt == end_dt:
-                            break
                         closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
 
+                        # Checks if the while loop stil is true
+                        if not delta_work_time > timedelta(seconds=7200) and closest_work == start_dt or closest_work_end > start_dt + timedelta(hours=2):
+                            break
+                        if closest_work == None or closest_work_end == None:
+                            break
+                        if  delta_work_time <= timedelta(seconds=7200):
+                            break
                     if delta_work_time <= timedelta(seconds=7200):
                         break
-
                     if closest_work == None or closest_work_end == None:
                         break
-
                     closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
-                
-                #Counts out the remaining time that is 2 hours or les
+
+                #Counts out the remaining time that is 2 hours or less
                 if delta_work_time >= timedelta(seconds=1):
                     closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
-
                     time_to_end =  delta_work_time
 
                     start_dt_no_tz = closest_work.replace(tzinfo=None)
                     vals = [{
-                        'name': self.project_id.name,
+                        'project_id': self.project_id.id,
                         'employee_id': employee.id,
                         'note': self.note,
                         'start_datetime': start_dt_no_tz,
@@ -185,12 +187,10 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                     time_delta -= delta_work_time
                     delta_work_time -= delta_work_time
 
-                    if start_dt == end_dt:
-                        break
-                
                 #Last check then it's hopefuly done
-                if delta_work_time < timedelta(seconds=0):
-                    break
+                    if delta_work_time <= timedelta(0):
+                        break
+
                 closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
 
 

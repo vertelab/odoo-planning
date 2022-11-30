@@ -30,6 +30,7 @@ Using Timeline to plan the work in a team
 =================================================
 
 More information:
+Make sure that the working schedule have the correct timezone
     """,
     #'sequence': '1',
     'author': 'Vertel AB',

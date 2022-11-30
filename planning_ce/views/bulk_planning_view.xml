@@ -37,7 +37,7 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem id="bulk_planning_ce_menu" name="Bulk Planning Schedule" sequence="30" parent="planning_ce.planning_ce_menu_root" action="bulk_planning_ce_action" groups="planning_ce.group_planning_ce_manager" />
+        <!-- <menuitem id="bulk_planning_ce_menu" name="Bulk Planning Schedule" sequence="30" parent="planning_ce.planning_ce_menu_root" action="bulk_planning_ce_action" groups="planning_ce.group_planning_ce_manager" /> -->
 
 
     </data>
