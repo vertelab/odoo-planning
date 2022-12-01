@@ -168,12 +168,15 @@ class Activities(models.Model):
         activity_ids = self.env['mail.activity'].search([('res_model', '=', 'project.task')])
         for activity in activity_ids:
             over_due_date = activity.date_deadline + timedelta(days=2)
-            if over_due_date == present_date:
-                activity.unlink()
+            if over_due_date <= present_date:
+                #activity.unlink()
+                activity.active = False
             project_task = self.env['project.task'].browse(activity.res_id)
             if project_task.stage_id.is_closed:
-                project_task.activity_ids.unlink()
+                #project_task.activity_ids.unlink()
+                project_task.activity_ids.active = False
 
         if day_plan := self.env['day.plan'].search([]):
             if not day_plan.activity_ids:
                 day_plan.unlink()
+
