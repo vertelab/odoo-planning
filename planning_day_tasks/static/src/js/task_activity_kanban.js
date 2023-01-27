@@ -17,14 +17,14 @@ odoo.define('planning_day_tasks.task_activity_kanban', function (require) {
          * @private
          */
          // YTI TODO: Should be transformed into a extend and specific to project
-        _openRecord: function () {
-            if (this.selectionMode !== true && this.modelName === 'mail.activity' &&
-                this.$(".o_project_kanban_boxes a").length) {
-                    this.$('.o_project_kanban_boxes a').first().click();
-            } else {
-                this._super.apply(this, arguments);
-            }
-        },
+//        _openRecord: function () {
+//            if (this.selectionMode !== true && this.modelName === 'mail.activity' &&
+//                this.$(".o_project_kanban_boxes a").length) {
+//                    this.$('.o_project_kanban_boxes a').first().click();
+//            } else {
+//                this._super.apply(this, arguments);
+//            }
+//        },
     });
 
 });

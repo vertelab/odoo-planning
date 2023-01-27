@@ -15,14 +15,16 @@ class Activities(models.Model):
             if rec.res_model == 'project.task':
                 task_id = self.env[rec.res_model].browse(rec.res_id)
                 rec.project_id = task_id.project_id.id
+                rec.task_id = task_id.id
                 rec.project_date_deadline = task_id.date_deadline
             else:
                 rec.project_id = False
                 rec.project_date_deadline = False
+                rec.task_id = False
 
     project_id = fields.Many2one("project.project", string="Project", compute=_compute_project_details)
     project_date_deadline = fields.Date(string="Project Date Deadline", compute=_compute_project_details)
-
+    task_id = fields.Many2one('project.task', compute=_compute_project_details)
     @api.depends("res_model")
     def _set_hours(self):
         for rec in self:
