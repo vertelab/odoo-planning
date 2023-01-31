@@ -57,7 +57,7 @@ class Activities(models.Model):
             'type': 'ir.actions.act_window',
             'target': 'current',
             'res_id': self.res_id,
-            'views': [[False, 'form']]
+            'views': [[False, 'form']],
         }
 
     @api.depends("res_model")
