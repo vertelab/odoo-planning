@@ -96,6 +96,7 @@
                         <group>
                             <field name="project_id"/>
                             <field name="task_id"/>
+                            <button string="View Task" name="button_show_task" type="object"/>
                         </group>
                     </group>
                     <group string="Recent Activities" attrs="{'invisible': [('res_model', '!=', 'project.task')]}">

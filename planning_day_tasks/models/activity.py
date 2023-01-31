@@ -8,7 +8,24 @@ class Activities(models.Model):
     _order = 'stage_id, date_deadline'
 
     active = fields.Boolean(string="Active", default=True)
+    
+    
+    def button_show_task(self):
+        view_id = self.env.ref('project.view_task_form2').id
+        action = {
+                "type": "ir.actions.act_window",
+                "name": _("Prodject planning"),
+                "view_mode": "form",
+                "res_model": 'project.task',
+                "target": "main",
+                "view_id":view_id,
+                "res_id":self.task_id.id,
+                'domain': '[]',
+                'context': {'search_default_my_tasks': 1, 'all_task': 0}
+            }
+        return action
 
+    
     @api.depends("res_model")
     def _compute_project_details(self):
         for rec in self:
