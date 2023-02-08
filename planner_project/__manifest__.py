@@ -40,10 +40,7 @@ Make sure that the working schedule have the correct timezone
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-planning',
-    'depends': [
-        'project',
-        'planning_ce',
-        ],
+    'depends': ['project','planning_ce',],
     'data': [
         # 'views/project_view.xml',
         #'views/planning_slot_view.xml',
