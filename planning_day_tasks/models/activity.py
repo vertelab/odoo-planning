@@ -2,6 +2,8 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from datetime import date, timedelta
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class Activities(models.Model):
     _inherit = 'mail.activity'
@@ -196,6 +198,6 @@ class Activities(models.Model):
                 project_task.activity_ids.active = False
 
         if day_plan := self.env['day.plan'].search([]):
-            if not day_plan.activity_ids:
-                day_plan.unlink()
-
+            for week in day_plan:
+                if week.planned_hours == 0:
+                    week.unlink()
