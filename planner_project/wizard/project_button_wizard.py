@@ -168,6 +168,7 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                         break
                     closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
 
+
                 #Counts out the remaining time that is 2 hours or less
                 if delta_work_time >= timedelta(seconds=1):
                     closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
@@ -188,9 +189,12 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                     delta_work_time -= delta_work_time
 
                 #Last check then it's hopefuly done
-                    if delta_work_time <= timedelta(0):
-                        break
+                    # if delta_work_time <= timedelta(0):
+                    #     _logger.error(6)
+                    #     break
 
                 closest_work, closest_work_end = self.get_worktimes(start_dt, end_dt)
+
+
 
 
