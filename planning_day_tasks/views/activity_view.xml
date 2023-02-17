@@ -95,6 +95,7 @@
                         </group>
                         <group>
                             <field name="project_id"/>
+                            <field name="task_id"/>
                         </group>
                     </group>
                     <group string="Recent Activities" attrs="{'invisible': [('res_model', '!=', 'project.task')]}">

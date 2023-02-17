@@ -39,7 +39,6 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
     _name = 'bulk.planner.slot'
     _description = 'Bulk Planning Slot'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-    name = fields.Char()
 
     def _default_start_datetime(self):
         return fields.Datetime.to_string(datetime.combine(fields.Datetime.now(), datetime.min.time()))

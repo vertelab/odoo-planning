@@ -2,6 +2,8 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from datetime import date, timedelta
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class Activities(models.Model):
     _inherit = 'mail.activity'
@@ -9,20 +11,39 @@ class Activities(models.Model):
 
     active = fields.Boolean(string="Active", default=True)
 
+
+    def button_show_task(self):
+        view_id = self.env.ref('project.view_task_form2').id
+        action = {
+                "type": "ir.actions.act_window",
+                "name": _("Project planning"),
+                "view_mode": "form",
+                "res_model": 'project.task',
+                "target": "main",
+                "view_id":view_id,
+                "res_id":self.task_id.id,
+                'domain': '[]',
+                'context': {'search_default_my_tasks': 1, 'all_task': 0}
+            }
+        return action
+
+    
     @api.depends("res_model")
     def _compute_project_details(self):
         for rec in self:
             if rec.res_model == 'project.task':
                 task_id = self.env[rec.res_model].browse(rec.res_id)
                 rec.project_id = task_id.project_id.id
+                rec.task_id = task_id.id
                 rec.project_date_deadline = task_id.date_deadline
             else:
                 rec.project_id = False
                 rec.project_date_deadline = False
+                rec.task_id = False
 
     project_id = fields.Many2one("project.project", string="Project", compute=_compute_project_details)
     project_date_deadline = fields.Date(string="Project Date Deadline", compute=_compute_project_details)
-
+    task_id = fields.Many2one('project.task', compute=_compute_project_details)
     @api.depends("res_model")
     def _set_hours(self):
         for rec in self:
@@ -55,7 +76,7 @@ class Activities(models.Model):
             'type': 'ir.actions.act_window',
             'target': 'current',
             'res_id': self.res_id,
-            'views': [[False, 'form']]
+            'views': [[False, 'form']],
         }
 
     @api.depends("res_model")
@@ -168,12 +189,15 @@ class Activities(models.Model):
         activity_ids = self.env['mail.activity'].search([('res_model', '=', 'project.task')])
         for activity in activity_ids:
             over_due_date = activity.date_deadline + timedelta(days=2)
-            if over_due_date == present_date:
-                activity.unlink()
+            if over_due_date <= present_date:
+                #activity.unlink()
+                activity.active = False
             project_task = self.env['project.task'].browse(activity.res_id)
             if project_task.stage_id.is_closed:
-                project_task.activity_ids.unlink()
+                #project_task.activity_ids.unlink()
+                project_task.activity_ids.active = False
 
         if day_plan := self.env['day.plan'].search([]):
-            if not day_plan.activity_ids:
-                day_plan.unlink()
+            for week in day_plan:
+                if week.planned_hours == 0:
+                    week.unlink()

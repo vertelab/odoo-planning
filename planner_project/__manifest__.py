@@ -40,10 +40,7 @@ Make sure that the working schedule have the correct timezone
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-planning',
-    'depends': [
-        'project',
-        'planning_ce',
-        ],
+    'depends': ['project','planning_ce',],
     'data': [
         # 'views/project_view.xml',
         #'views/planning_slot_view.xml',
@@ -51,7 +48,7 @@ Make sure that the working schedule have the correct timezone
         'security/ir.model.access.csv',
         'wizard/project_button_wizard.xml',
     ],
-    'auto_install': True,
+    'auto_install': False,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
