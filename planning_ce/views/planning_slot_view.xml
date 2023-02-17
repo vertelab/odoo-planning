@@ -114,7 +114,7 @@
                             <field name="project_id" />
                             <field name="employee_id" />
                             <field name="start_datetime" />
-                            <field name="end_datetime" string="TEST"/>
+                            <field name="end_datetime" />
 <!--                            <field name="role_id" />-->
                             <field name="company_id" groups="base.group_multi_company" />
                             <field name="note" />
