@@ -1,1 +1,1 @@
-# odoo-planning 1
+# odoo-planning
