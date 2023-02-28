@@ -71,6 +71,16 @@
             <field name="action_id" ref="planning_ce_report_action_analysis"/>
         </record>
 
+        <record id="planning_ce_menu_compare" model="ir.actions.act_window">
+            <field name="name">ce_planner_report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ce_planner.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_id" ref="planning_ce.planning_compare_wizard"/>
+        </record>
+
         <menuitem
             id="planning_ce_menu_reporting"
             name="Reporting"
@@ -83,5 +93,10 @@
             action="planning_ce_report_action_analysis"
             sequence="10" parent="planning_ce_menu_reporting"/>
 
+        <menuitem
+            id="planning_ce_compare"
+            name="Comparison Wizard"
+            action="planning_ce_menu_compare"
+            sequence="10" parent="planning_ce_menu_reporting"/>
     </data>
 </odoo>

@@ -56,6 +56,7 @@ More information:
         'views/planning_report_views.xml',
         'views/hr_view.xml',
         'views/project_view.xml',
+        'wizard/planning_compare_wizard_view.xml',
         #'views/bulk_planning_view.xml',
         #'wizard/planning_slot_wizard_view.xml',
        ],

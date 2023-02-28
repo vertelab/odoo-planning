@@ -2,6 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_planner_ce_planner,access_planner_ce_planner,model_planner_ce_planner,base.group_user,1,1,1,1
 access_planner_ce_slot,access_planner_ce_slot,model_planner_ce_slot,base.group_user,1,1,1,1
 access_bulk_planner_ce_slot,access_bulk_planner_ce_slot,model_bulk_planner_ce_slot,planning_ce.group_planning_ce_manager,1,1,1,1
-
 access_planner_ce_role,access_planner_ce_role,model_planner_ce_role,base.group_user,1,1,1,1
-
+access_ce_planner_report,access_ce_planner_report,model_ce_planner_report,base.group_user,1,1,1,1 
+access_ce_planner_report_wizard,access_ce_planner_report_wizard,model_ce_planner_report_wizard,base.group_user,1,1,1,1
