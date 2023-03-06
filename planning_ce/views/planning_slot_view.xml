@@ -149,7 +149,7 @@
             <field name="name">planner_ce.slot.calendar</field>
             <field name="model">planner_ce.slot</field>
             <field name="arch" type="xml">
-                <calendar string="Planning" date_start="start_datetime" date_stop="end_datetime" form_view_id="%(planning_ce_view_form_quickcreate)d" event_open_popup="true" quick_add="False">
+                <calendar string="Planning" date_start="start_datetime" date_stop="end_datetime" form_view_id="%(planning_ce_view_form_quickcreate)d" event_open_popup="true" quick_add="False" color="employee_id">
                     <field name="name" />
                     <field name="employee_id" avatar_field="image_128" />
 <!--                    <field name="role_id" />-->
