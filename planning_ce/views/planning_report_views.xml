@@ -81,6 +81,39 @@
             <field name="view_id" ref="planning_ce.planning_compare_wizard"/>
         </record>
 
+        <record id="planning_ce_menu_compare_view_action" model="ir.actions.act_window">
+            <field name="name">ce_planner_report_view_action</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ce_planner.report</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <!-- <field name="view_type">tree,form,pivot</field> -->
+        </record>
+
+        <record id="planning_ce_menu_compare_view" model="ir.ui.view">
+            <field name="name">ce_planner_report_view</field>
+            <field name="model">ce_planner.report</field>
+            <field name="arch" type="xml">
+                <!-- <form string="CE Planner Report">
+                    <field name="name"/>
+                    <field name="date"/>
+                    ...
+                </form> -->
+                <tree string="CE Planner Report">
+                    <field name="project_id"/>
+                    <field name="employee_id"/>
+                    <field name="time_planned"/>
+                    <field name="time_spent"/>
+                </tree>
+                <!-- <pivot string="Planning Analysis">
+                    <field name="week"/>
+                    <field name="employee_id"/>
+                    <field name="time_planned" />
+                    <field name="time_spent" />
+                </pivot> -->
+            </field>
+        </record>
+
+
         <menuitem
             id="planning_ce_menu_reporting"
             name="Reporting"
@@ -97,6 +130,12 @@
             id="planning_ce_compare"
             name="Comparison Wizard"
             action="planning_ce_menu_compare"
+            sequence="10" parent="planning_ce_menu_reporting"/>
+
+        <menuitem
+            id="planning_ce_compare_view"
+            name="Comparison View"
+            action="planning_ce_menu_compare_view_action"
             sequence="10" parent="planning_ce_menu_reporting"/>
     </data>
 </odoo>

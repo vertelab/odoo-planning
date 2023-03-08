@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from pytz import utc
+from dateutil.relativedelta import relativedelta, MO, FR
 
 import logging
 import pytz
@@ -41,13 +42,16 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     def _default_start_datetime(self):
-        return fields.Datetime.to_string(datetime.combine(fields.Datetime.now(), datetime.min.time()))
-        
-
+        return fields.Datetime.to_string(datetime.combine((datetime.now() + relativedelta(weekday=MO(+1))), time.min).replace(tzinfo=None))        
+    
     @api.depends('start_datetime')
     def _default_end_datetime(self):
-        return fields.Datetime.to_string(datetime.combine(fields.Datetime.now(), datetime.max.time()))
-    
+        end_date_next_friday = datetime.now() + relativedelta(weekday=FR(+1))
+        start_datetime = datetime.strptime(self._default_start_datetime(), '%Y-%m-%d %H:%M:%S')
+        if end_date_next_friday < start_datetime:
+            end_date_next_friday = datetime.now() + relativedelta(weeks=1, weekday=FR(+1))
+        return fields.Datetime.to_string(datetime.combine(end_date_next_friday, time.max).replace(tzinfo=None))
+        
     contract_schema_time = fields.Float(string="Schema Time", compute='_get_schema', store=True)
     contract_ids = fields.One2many('hr.contract','employee_id', string='Employee Contracts')
 

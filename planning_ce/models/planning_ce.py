@@ -154,6 +154,7 @@ class PlannerCePlanningSlot(models.Model):
 
     contract_schema_time = fields.Float(string="Schema Time", compute='_get_schema', store=True)
 
+
     @api.depends('start_datetime', 'end_datetime')
     def compute_slot_size(self):
         for slot in self:
