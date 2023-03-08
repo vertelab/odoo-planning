@@ -53,18 +53,11 @@ More information:
         'views/menu.xml',
         'views/planning_role_view.xml',
         'views/planning_slot_view.xml',
-<<<<<<< HEAD
-        #'views/planning_report_views.xml', uncomment before pushing
-        'views/hr_view.xml',
-        'views/project_view.xml',
-        'wizard/planning_mass_change_slots_wizard.xml',
-        #'wizard/planning_compare_wizard_view.xml',
-=======
-        'wizard/planning_compare_wizard_view.xml',
         'views/planning_report_views.xml',
         'views/hr_view.xml',
         'views/project_view.xml',
->>>>>>> 8e9ef28a26f46e97fe1f0549d637187505b4dfde
+        'wizard/planning_mass_change_slots_wizard.xml',
+        'wizard/planning_compare_wizard_view.xml',
         #'views/bulk_planning_view.xml',
         #'wizard/planning_slot_wizard_view.xml', uncomment before pushing
        ],
