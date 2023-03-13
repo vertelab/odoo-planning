@@ -47,6 +47,7 @@ Make sure that the working schedule have the correct timezone
         #'views/bulk_planning_view.xml',
         'security/ir.model.access.csv',
         'wizard/project_button_wizard.xml',
+        'views/project_planning.xml',
     ],
     'auto_install': False,
 }
