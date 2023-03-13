@@ -1,5 +1,6 @@
 <odoo>
     <data>
+        
         <!-- planning.slot views -->
         <record id="planning_ce_view_tree" model="ir.ui.view">
             <field name="name">planner_ce.slot.tree</field>
@@ -345,6 +346,34 @@
                 </p>
             </field>
         </record>
+
+
+
+        <record model="ir.actions.server" id="action_planning_ce_action_test2">
+            <field name="name">Change Employee</field>
+            <field name="model_id" ref="planning_ce.model_planner_ce_slot"></field>
+            <field name="binding_model_id" ref="planning_ce.model_planner_ce_slot"></field>
+            <field name="binding_view_types">list</field>
+            <field name="binding_type">action</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = record.action_mass_change_slots()
+            </field>
+        </record>
+
+<!--
+        <record model="ir.actions.server" id="action_planning_ce_action_test2">
+            <field name="name">Change slots</field>
+            <field name="model_id" ref="planner_ce.slot"></field>
+            <field name="binding_model_id" ref="planner_ce.slot"></field>
+            <field name="binding_view_types">list</field>
+            <field name="binding_type">action</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = record.action_plan_project()
+            </field>
+        </record>
+-->
 
         <menuitem id="planning_ce_menu_schedule_project" name="By Project" sequence="11" parent="planning_ce_menu_schedule" action="planning_ce_action_schedule_by_project"/>
 
