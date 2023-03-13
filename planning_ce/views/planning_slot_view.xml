@@ -131,6 +131,7 @@
                 <search>
 <!--                    <field name="role_id" />-->
                     <field name="employee_id" />
+                    <field name="project_id"/>
                     <filter name="open_shifts" string="Open Shifts" domain="[('employee_id', '=', False)]" />
                     <filter name="my_shifts" string="My Shifts" domain="[('user_id', '=', uid)]" />
                     <separator />
