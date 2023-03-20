@@ -34,7 +34,7 @@ Make sure that the working schedule have the correct timezone
     """,
     #'sequence': '1',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-planning/planning_ce',
+    'website': 'https://vertel.se/apps/odoo-planning/planner_project',
     'images': ['static/description/icon_vertel.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
