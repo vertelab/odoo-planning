@@ -135,8 +135,15 @@
                     <filter name="open_shifts" string="Open Shifts" domain="[('employee_id', '=', False)]" />
                     <filter name="my_shifts" string="My Shifts" domain="[('user_id', '=', uid)]" />
                     <separator />
-                    <filter name="future" string="Future" domain="[('start_datetime', '>=', time.strftime('%%Y-%%m-%%d 00:00:00'))]" />
+                    <filter name="future" string="Future" domain="[('start_datetime', '>=', time.strftime('%%Y-%%m-%%d 00:00:00') )]" />
                     <filter name="past" string="Past" domain="[('start_datetime', '&lt;=', time.strftime('%%Y-%%m-%%d 23:59:59'))]" />
+                    <filter name="filter_today_timelogs" string="Today" domain="[('start_datetime','&lt;=',time.strftime('%%Y-%%m-%%d 23:59:59')),('start_datetime','&gt;=',time.strftime('%%Y-%%m-%%d 00:00:00'))]" />
+                    <filter string="Current Month" name="Current_month" domain="[('start_datetime','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('start_datetime','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="Prev Month" name="Prev_month" domain="[('start_datetime','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('start_datetime','&lt;',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="Next Month" name="Next_month" domain="[('start_datetime','&lt;',(context_today()+relativedelta(months=2)).strftime('%%Y-%%m-01')), ('start_datetime','&gt;=',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+                    <filter name="terp-go-week" string="This week" domain="[('start_datetime','&lt;=', (datetime.date.today()+ datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d 23:59:59')),('start_datetime','&gt;=',(datetime.date.today()).strftime('%%Y-%%m-%%d 00:00:00'))]"/>
+                    <filter name="terp-go-week" string="Next week" domain="[('start_datetime','&lt;=', (datetime.date.today()+ datetime.timedelta(days=14)).strftime('%%Y-%%m-%%d 23:59:59')),('start_datetime','&gt;=',(datetime.date.today()+datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d 23:59:59'))]"/>
+                    <filter string="Previous week" name="Previous week" domain="[('start_datetime','&gt;=',(context_today()-relativedelta(weeks =1)).strftime('%%Y-%%m-%%d')),('start_datetime','&lt;',(context_today()).strftime('%%Y-%%m-%%d'))]"/>
                     <group string="Group By">
                         <filter name="group_by_employee" string="Employee" context="{'group_by': 'employee_id'}" />
 <!--                        <filter name="group_by_role" string="Role" context="{'group_by': 'role_id'}" />-->
