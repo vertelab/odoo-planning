@@ -6,16 +6,12 @@
         <field name="arch" type="xml">
             <form string="Compare planned vs spent">
                 <group>
-                    <!-- <field name="project"/>
-                    <field name="employee"/> -->
                     <field name="date_start"/>
                     <field name="date_end"/>
-                    <!-- <field name="time_planned"/>
-                    <field name="time_spent"/> -->
                 </group>
                 <footer>
-                    <button name="do_something" string="Do Something" type="object" class="btn-primary"/>
-                    <!-- <button name="cancel" string="Cancel" type="object" class="btn-default"/> -->
+                    <button name="create_reports" string="Create" type="object" class="btn-primary"/>
+                    <button name="cancel" string="Cancel" special="cancel" class="oe_link"/>
                 </footer>
             </form>
         </field>

@@ -2,7 +2,8 @@
 <odoo>
     <data>
 
-        <record id="planning_ce_lot_report_view_pivots" model="ir.ui.view">
+        <!-- Slots -->
+        <record id="planning_ce_slot_report_view_pivots" model="ir.ui.view">
             <field name="name">Pivot</field>
             <field name="model">planner_ce.slot</field>
             <field name="arch" type="xml">
@@ -15,7 +16,7 @@
             </field>
         </record>
 
-            <record id="planning_ce_slot_report_view_graph" model="ir.ui.view">
+        <record id="planning_ce_slot_report_view_graph" model="ir.ui.view">
             <field name="name">planner_ce.slot.report.graph</field>
             <field name="model">planner_ce.slot</field>
             <field name="arch" type="xml">
@@ -25,7 +26,6 @@
                 </graph>
             </field>
         </record>
-
 
         <record id="planning_ce_report_action_analysis" model="ir.actions.act_window">
             <field name="name">Planning Analysis</field>
@@ -40,10 +40,11 @@
             </field>
         </record>
 
+
         <record id="planning_ce_slot_report_action_view_pivot" model="ir.actions.act_window.view">
             <field name="sequence" eval="1"/>
             <field name="view_mode">pivot</field>
-            <field name="view_id" ref="planning_ce_lot_report_view_pivots"/>
+            <field name="view_id" ref="planning_ce_slot_report_view_pivots"/>
             <field name="act_window_id" ref="planning_ce_report_action_analysis"/>
         </record>
 
@@ -71,71 +72,92 @@
             <field name="action_id" ref="planning_ce_report_action_analysis"/>
         </record>
 
-        <record id="planning_ce_menu_compare" model="ir.actions.act_window">
-            <field name="name">ce_planner_report</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">ce_planner.report.wizard</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <!-- <field name="view_type">form</field> -->
-            <field name="view_id" ref="planning_ce.planning_compare_wizard"/>
-        </record>
 
+        <!-- Compare View -->
         <record id="planning_ce_menu_compare_view_action" model="ir.actions.act_window">
-            <field name="name">ce_planner_report_view_action</field>
+            <field name="name">Comparison View</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ce_planner.report</field>
             <field name="view_mode">tree,form,pivot</field>
-            <!-- <field name="view_type">tree,form,pivot</field> -->
         </record>
 
         <record id="planning_ce_menu_compare_view" model="ir.ui.view">
             <field name="name">ce_planner_report_view</field>
             <field name="model">ce_planner.report</field>
             <field name="arch" type="xml">
-                <!-- <form string="CE Planner Report">
-                    <field name="name"/>
-                    <field name="date"/>
-                    ...
-                </form> -->
                 <tree string="CE Planner Report">
                     <field name="project_id"/>
                     <field name="employee_id"/>
                     <field name="time_planned"/>
                     <field name="time_spent"/>
                 </tree>
-                <!-- <pivot string="Planning Analysis">
-                    <field name="week"/>
-                    <field name="employee_id"/>
-                    <field name="time_planned" />
-                    <field name="time_spent" />
-                </pivot> -->
+            </field>
+        </record>
+
+        <record id="planning_ce_menu_compare_form_view" model="ir.ui.view">
+            <field name="name">ce_planner_report_form_view</field>
+            <field name="model">ce_planner.report</field>
+            <field name="arch" type="xml">
+                 <form string="CE Planner Report">
+                    <sheet>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="employee_id"/>
+                            <field name="date"/>
+                            <field name="time_planned"/>
+                            <field name="time_spent" string="Time Spent"/>
+                        </group>
+                    </sheet>
+                </form> 
+            </field>
+        </record>
+
+        <record id="planning_ce_menu_compare_pivot_view" model="ir.ui.view">
+            <field name="name">ce_planner_report_pivot_view</field>
+            <field name="model">ce_planner.report</field>
+            <field name="arch" type="xml">
+                 <pivot string="Compare View">
+                    <field name="employee_id" type="row"/>
+                    <field name="time_planned" type="measure"/>
+                    <field name="time_spent" type="measure"/>
+                </pivot> 
             </field>
         </record>
 
 
+        <!-- Wizard-->
+        <record id="planning_ce_menu_compare_wizard_action" model="ir.actions.act_window">
+            <field name="name"/>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ce_planner.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <!-- Menu Items -->
         <menuitem
             id="planning_ce_menu_reporting"
             name="Reporting"
-            parent="planning_ce.planning_ce_menu_root"
+            parent="planning_ce_menu_root"
             sequence="40"/>
-
-        <menuitem
-            id="planning_ce_menu_planning_analysis"
-            name="Planning Analysis"
-            action="planning_ce_report_action_analysis"
-            sequence="10" parent="planning_ce_menu_reporting"/>
-
-        <menuitem
-            id="planning_ce_compare"
-            name="Comparison Wizard"
-            action="planning_ce_menu_compare"
-            sequence="10" parent="planning_ce_menu_reporting"/>
 
         <menuitem
             id="planning_ce_compare_view"
             name="Comparison View"
             action="planning_ce_menu_compare_view_action"
-            sequence="10" parent="planning_ce_menu_reporting"/>
+            sequence="1" parent="planning_ce_menu_reporting"/>
+
+        <menuitem
+            id="planning_ce_menu_planning_analysis"
+            name="Planning Analysis"
+            action="planning_ce_report_action_analysis"
+            sequence="2" parent="planning_ce_menu_reporting"/>
+
+        <menuitem
+            id="planning_ce_compare"
+            name="Create Reports"
+            action="planning_ce_menu_compare_wizard_action"
+            sequence="3" parent="planning_ce_menu_reporting"/>
     </data>
 </odoo>
