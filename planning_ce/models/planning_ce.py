@@ -16,9 +16,6 @@ from functools import partial
 
 _logger = logging.getLogger(__name__)
 
-from importlib.machinery import SourceFileLoader
-
-
 # class ProjectTask(models.Model):
 #     _inherit = "project.task"
 
