@@ -1,27 +1,42 @@
 import logging
-from datetime import date, timedelta
+
+from datetime import datetime, timedelta, date
+
 from odoo import api, fields, models, _
 _logger = logging.getLogger(__name__)
-import calendar
 
+all_weeks = [(str(x),str(x)) for x in range(1,53)]
 
 class CePlannerReportWizard(models.TransientModel):
     _name = 'ce_planner.report.wizard'
     
-    date_start = fields.Date("Date Start")
-    date_end = fields.Date("Date End")
+    # project = fields.Many2one("project.project", "Project")
+    # employee = fields.Many2one("hr.employee", "Employee")
 
-    def create_reports(self):
+    def calculate_year(self):
+        todays_date = date.today()
+        year = todays_date.year
+        return year
         
-        #--entire month is selected if fields are left empty, required=True might be better on the fields..?
-        if self.date_start is False or self.date_end is False:
-            today = date.today()
-            last_day = calendar.monthrange(today.year, today.month)
-            self.date_start = date(today.year, today.month, 1)
-            self.date_end = date(today.year, today.month, last_day[1])
+    year = fields.Integer("Year", default=calculate_year)
 
-        date_range = self.get_date_range(self.date_start, self.date_end)
-        for employee in self.env['hr.employee'].search([]):
+
+    start_week = fields.Selection(all_weeks,
+             string='Start week', required=True, default="1")
+    end_week = fields.Selection(all_weeks,
+             string='End week', required=True, default="1")
+	  # week = fields.Integer("Week")
+    # time_planned = fields.Integer("Time planned")
+    # time_spent = fields.Integer("Time spent")
+
+    def do_something(self):
+
+        start_date = self.monday_of_calenderweek(self.year, int(self.start_week))
+        end_date = self.sunday_of_calenderweek(self.year, int(self.end_week))
+        date_range = self.get_date_range(start_date, end_date)
+
+        for employee in self.env['hr.employee'].search([]): # går igenom alla anställda
+
             for day in date_range:
                 for line in self.env['account.analytic.line'].search([('employee_id', '=', employee.id)]):
                     if line.date == day:
@@ -56,9 +71,7 @@ class CePlannerReportWizard(models.TransientModel):
                             'project_id': slot.project_id.id,
                             'date': day,
                         })
-
             # return {'type': 'ir.actions.act_window_close'}
-
 
 
 
@@ -69,7 +82,16 @@ class CePlannerReportWizard(models.TransientModel):
             date_range.append(date_1) 
             date_1 += timedelta(days=1) 
         return date_range
-    
+
+    def monday_of_calenderweek(self, year, week):
+        first = date(year, 1, 1)
+        base = 1 if first.isocalendar()[1] == 1 else 8
+        return first + timedelta(days=base - first.isocalendar()[2] + 7 * (week - 1))
+
+    def sunday_of_calenderweek(self, year, week):
+        first = date(year, 1, 1)
+        base = 1 if first.isocalendar()[1] == 1 else 8
+        return first + timedelta(days=base - first.isocalendar()[2] + 6 + 7 * (week-1))
 
     def get_first_last_day_of_week(self, date):
         beginning_end = {}
