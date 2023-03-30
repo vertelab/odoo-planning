@@ -8,13 +8,16 @@
                 <group>
                     <!-- <field name="project"/>
                     <field name="employee"/> -->
-                    <field name="date_start"/>
-                    <field name="date_end"/>
+                    <field name="year"/>
+                    <field name="start_week"/>
+                    <field name="end_week"/>
+                    <!--<field name="v1"/>
+                    <field name="v2"/>   -->                 
                     <!-- <field name="time_planned"/>
                     <field name="time_spent"/> -->
                 </group>
                 <footer>
-                    <button name="do_something" string="Do Something" type="object" class="btn-primary"/>
+                    <button name="do_something" string="Apply" type="object" class="btn-primary"/>
                     <!-- <button name="cancel" string="Cancel" type="object" class="btn-default"/> -->
                 </footer>
             </form>

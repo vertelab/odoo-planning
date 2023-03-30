@@ -70,6 +70,18 @@
             }</field>
             <field name="action_id" ref="planning_ce_report_action_analysis"/>
         </record>
+        <record id="ce_planner_report_search" model="ir.ui.view">
+            <field name="name">ce_planner_report_search</field>
+            <field name="model">ce_planner.report</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="project_id" />
+                    <field name="time_planned"/>
+                    <field name="time_spent"/>
+                    <field name="week"/>
+                </search>
+            </field>
+        </record>
 
         <record id="planning_ce_menu_compare" model="ir.actions.act_window">
             <field name="name">ce_planner_report</field>
