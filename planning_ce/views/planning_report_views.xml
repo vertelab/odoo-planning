@@ -79,6 +79,11 @@
                     <field name="time_planned"/>
                     <field name="time_spent"/>
                     <field name="week"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Project" name="group_by_object" domain="[]" context="{'group_by':'project_id'}"/>
+                        <filter string="Employee" name="group_by_object" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <filter string="Date" name="group_by_object" domain="[]" context="{'group_by':'date'}"/>
+                    </group>
                 </search>
             </field>
         </record>
