@@ -10,6 +10,11 @@ _logger = logging.getLogger(__name__)
 class PlannerCeReport(models.Model):
     _name = "ce_planner.report"
 
+    def get_name(self):
+        for record in self:
+            record.name = self._get_string_url()
+
+    name = fields.Char(compute="get_name")
     project_id = fields.Many2one("project.project", "Project")
     employee_id = fields.Many2one("hr.employee", "Employee")
     date = fields.Date()
@@ -83,3 +88,6 @@ class PlannerCeReport(models.Model):
             beginning_end['end'] = end_of_week
 
             return beginning_end
+
+    def _get_string_url(self):
+        return self.project_id.name + "/" + self.employee_id.name + "/" + str(self.date)
