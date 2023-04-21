@@ -10,8 +10,7 @@ class Activities(models.Model):
     _order = 'stage_id, date_deadline'
 
     active = fields.Boolean(string="Active", default=True)
-
-
+   
     def button_show_task(self):
         view_id = self.env.ref('project.view_task_form2').id
         action = {
@@ -44,6 +43,7 @@ class Activities(models.Model):
     project_id = fields.Many2one("project.project", string="Project", compute=_compute_project_details)
     project_date_deadline = fields.Date(string="Project Date Deadline", compute=_compute_project_details)
     task_id = fields.Many2one('project.task', compute=_compute_project_details)
+    price_unit_task = fields.Float(related = "task_id.sale_line_id.price_unit")
     @api.depends("res_model")
     def _set_hours(self):
         for rec in self:
