@@ -6,7 +6,9 @@
         <menuitem
             id="planning_ce_menu_root"
             name="Planning CE"
-            sequence="25"/>
+            sequence="25"
+            web_icon="planning_ce,static/description/icon.png"
+            />
 
             <menuitem
                 id="planning_ce_menu_schedule"
