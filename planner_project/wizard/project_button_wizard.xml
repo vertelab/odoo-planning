@@ -29,7 +29,8 @@
                         <field name="note"/>
                     </group>
                     <footer>
-                        <button name="create_slots" type="object">Create slots</button>
+                       <!-- <button name="create_slots" type="object">Create slots</button> -->
+                       <button name="time_allocator" type="object">Create slots</button>
                     </footer>
                 </form>
             </field>
