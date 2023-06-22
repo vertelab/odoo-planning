@@ -122,13 +122,16 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
             
             if index != 0:
                 
-                if user_blocks[index - 1].start_datetime < user_blocks[index].start_datetime and (user_blocks[index - 1].end_datetime > user_blocks[index].start_datetime and user_blocks[index - 1].end_datetime <= user_blocks[index].end_datetime):
+                if user_blocks[index - 1].start_datetime < user_blocks[index].start_datetime and \
+                    (user_blocks[index - 1].end_datetime > user_blocks[index].start_datetime and \
+                     user_blocks[index - 1].end_datetime <= user_blocks[index].end_datetime):
                 
                     user_blocks[index].start_datetime = user_blocks[index - 1].start_datetime
                     
                     blocks_to_delete.append(user_blocks[index - 1])
                     
-                elif user_blocks[index].start_datetime <= user_blocks[index - 1].start_datetime and user_blocks[index].end_datetime >= user_blocks[index - 1].end_datetime:
+                elif user_blocks[index].start_datetime <= user_blocks[index - 1].start_datetime and \
+                    user_blocks[index].end_datetime >= user_blocks[index - 1].end_datetime:
                     
                     blocks_to_delete.append(user_blocks[index - 1])
         
@@ -188,7 +191,8 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                         
                 if (block.end_datetime - block.start_datetime) < (ed - st):
                     
-                    if (block.start_datetime >= st and block.start_datetime < ed) and (block.end_datetime <= ed and block.end_datetime > st):
+                    if (block.start_datetime >= st and block.start_datetime < ed) \
+                        and (block.end_datetime <= ed and block.end_datetime > st):
                             
                         time_slot.append(block)        
                 
@@ -300,7 +304,8 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                 
             for block in user_blocks:
                     
-                if not (block.start_datetime >= st and block.start_datetime < ed) and (block.end_datetime <= ed and block.end_datetime > st):
+                if not (block.start_datetime >= st and block.start_datetime < ed) and \
+                    (block.end_datetime <= ed and block.end_datetime > st):
                     
                     if not ((st,ed)) in time_slots_to_remove:
                     
@@ -308,7 +313,8 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                     
                     top_block_fix_time = block.end_datetime
                 
-                elif (block.start_datetime >= st and block.start_datetime < ed) and not (block.end_datetime <= ed and block.end_datetime > st):
+                elif (block.start_datetime >= st and block.start_datetime < ed) and \
+                    not (block.end_datetime <= ed and block.end_datetime > st):
                     
                     if not ((st,ed)) in time_slots_to_remove:
                     
@@ -318,7 +324,9 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                 
                 else:
                     
-                    if (block.start_datetime < st and block.end_datetime > ed) or (block.start_datetime <= st and block.end_datetime > ed) or (block.start_datetime < st and block.end_datetime >= ed):
+                    if (block.start_datetime < st and block.end_datetime > ed) \
+                        or (block.start_datetime <= st and block.end_datetime > ed) \
+                        or (block.start_datetime < st and block.end_datetime >= ed):
                         
                         if not ((st,ed)) in time_slots_to_remove:
                         
@@ -432,9 +440,11 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
         self.end_datetime = (datetime.combine(self.end_datetime, datetime.max.time()))
         
         
-        if len(self._start_dt_list) == 0 and len(self._nd_dt_list) == 0:
+        if len(self._start_dt_list) == 0 and len(self._end_dt_list) == 0:
                         
-            raise UserError(_("The work time is more then the emplyee contracted time betwen start and end time or the times you have chosen dose not contain any work time, pleas change the work time."))
+            raise UserError("The work time is more than the employee's contracted time "\
+                            "between the start and end times, or the times you have chosen do not "\
+                            "contain any available time slots. Please change the work time.")
             
         closest_work = self._start_dt_list[0]        
 
