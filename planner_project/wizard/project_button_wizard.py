@@ -114,7 +114,7 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
         return split_time
     
     
-    def _handel_user_blocks_that_overlap(self,user_blocks):
+    def _handle_user_blocks_that_overlap(self,user_blocks):
         
         blocks_to_delete = []
         
@@ -122,6 +122,7 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
             
             if index != 0:
                 
+                # Checks if the previous user_block's bottom part overlaps the current user_blocks upper part  
                 if user_blocks[index - 1].start_datetime < user_blocks[index].start_datetime and \
                     (user_blocks[index - 1].end_datetime > user_blocks[index].start_datetime and \
                      user_blocks[index - 1].end_datetime <= user_blocks[index].end_datetime):
@@ -129,7 +130,8 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                     user_blocks[index].start_datetime = user_blocks[index - 1].start_datetime
                     
                     blocks_to_delete.append(user_blocks[index - 1])
-                    
+                
+                # Checks if one block is inside the other
                 elif user_blocks[index].start_datetime <= user_blocks[index - 1].start_datetime and \
                     user_blocks[index].end_datetime >= user_blocks[index - 1].end_datetime:
                     
@@ -174,7 +176,7 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
         
         user_blocks.sort(key=_sort_slots_on_time)
         
-        user_blocks = self._handel_user_blocks_that_overlap(user_blocks)
+        user_blocks = self._handle_user_blocks_that_overlap(user_blocks)
         
         return user_blocks     
 
@@ -190,17 +192,20 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
             for block in user_blocks:
                         
                 if (block.end_datetime - block.start_datetime) < (ed - st):
-                    
+
+                    # Checks if the block exists inside the work time
                     if (block.start_datetime >= st and block.start_datetime < ed) \
                         and (block.end_datetime <= ed and block.end_datetime > st):
                             
                         time_slot.append(block)        
-                
+
+            # If there is more than one slot inside a work slot
             if len(time_slot) > 1:
                 
                 uniqe_slots = []
                     
                 for index ,slot in enumerate(time_slot):
+                    
                     
                     if index != 0:
                             
@@ -252,7 +257,7 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                     self._start_dt_list.append(slot[0])
                     self._end_dt_list.append(slot[1])
                             
-                        
+            # Checks if there is only one block and it's smaller than the time slot
             elif len(time_slot) == 1 and (time_slot[0].end_datetime - time_slot[0].start_datetime) < (ed - st):
                 
                 if time_slot[0].start_datetime == st:
@@ -303,7 +308,8 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
             end_block_fix_time = ed
                 
             for block in user_blocks:
-                    
+                
+                # Checks if this blocks top part is outside of the scheduled work time
                 if not (block.start_datetime >= st and block.start_datetime < ed) and \
                     (block.end_datetime <= ed and block.end_datetime > st):
                     
@@ -313,6 +319,8 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                     
                     top_block_fix_time = block.end_datetime
                 
+                # Checks if this blocks bottom part is outside of the scheduled work time
+
                 elif (block.start_datetime >= st and block.start_datetime < ed) and \
                     not (block.end_datetime <= ed and block.end_datetime > st):
                     
@@ -323,7 +331,7 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                     end_block_fix_time = block.start_datetime
                 
                 else:
-                    
+                    # Checks if both the bottom part and the top part are outside of the scheduled work time
                     if (block.start_datetime < st and block.end_datetime > ed) \
                         or (block.start_datetime <= st and block.end_datetime > ed) \
                         or (block.start_datetime < st and block.end_datetime >= ed):
@@ -406,18 +414,19 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
                                     
                 positions_to_be_placed.append(dif)
                         
-            
-            while len(positions_to_be_placed) != 0 and work_time_delta >= positions_to_be_placed[0]:
+            # Checks if there is times left in the schedule, and that we have work time left
+            while len(positions_to_be_placed) != 0 and work_time_delta >timedelta(hours=0):
                 
                 work_time_delta -= positions_to_be_placed[0]
                 
-                self._create_slots(positions_to_be_placed[0],id)
+                self._time_slicer(positions_to_be_placed[0],id)
                 
                 positions_to_be_placed.pop(0)
-                
-            if work_time_delta > timedelta(hours=0):
-                
-                self._create_slots(work_time_delta,id)
+            if work_time_delta >timedelta(hours=0):
+                raise UserError("The time range that you chose does not have enough available work time")
+            
+
+
         
         
     
@@ -435,16 +444,12 @@ class PlannerCePlanningSlotprojectWizard(models.TransientModel):
         self.env['planner_ce.slot'].create(vals)
         
 
-    def _create_slots(self, work_time, employee):
+    def _time_slicer(self, work_time, employee):
         
         self.end_datetime = (datetime.combine(self.end_datetime, datetime.max.time()))
         
         
-        if len(self._start_dt_list) == 0 and len(self._end_dt_list) == 0:
-                        
-            raise UserError("The work time is more than the employee's contracted time "\
-                            "between the start and end times, or the times you have chosen do not "\
-                            "contain any available time slots. Please change the work time.")
+
             
         closest_work = self._start_dt_list[0]        
 
