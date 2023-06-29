@@ -203,3 +203,6 @@ class Activities(models.Model):
             for week in day_plan:
                 if week.planned_hours == 0:
                     week.unlink()
+    
+
+    

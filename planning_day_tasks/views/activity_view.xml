@@ -1,5 +1,7 @@
 <odoo>
     <data>
+
+        
         <record id="planned_activities_kanban" model="ir.ui.view">
             <field name="name">mail.activity.kanban</field>
             <field name="model">mail.activity</field>
@@ -87,14 +89,17 @@
             <field name="inherit_id" ref="mail.mail_activity_view_form_popup"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[last()]" position="after">
-                    <group attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
+                    <group>
                         <group>
+                              <field name="planned_hours" widget="float_time"/>
+                        </group>
+                        <group attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
                             <field name="planned_hours" widget="float_time"/>
                             <field name="price_unit_task" />
                             <field name="task_user_id" invisible="1"/>
                             <field name="project_date_deadline"/>
                         </group>
-                        <group>
+                        <group attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
                             <field name="project_id"/>
                             <field name="task_id"/>
                         </group>

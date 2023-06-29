@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="view_server_action_form_template" model="ir.ui.view">
+            <field name="name">view_server_action_form_template</field>
+            <field name="model">ir.actions.server</field>
+            <field name="inherit_id" ref="mail.view_server_action_form_template"/>
+            <field name="arch" type="xml">
+                <field name="activity_user_id" position="after">
+                    <field name="planned_hours" widget="float_time" attrs="{'invisible': [('state', '!=', 'next_activity')]}"/>
+                </field>
+            </field>
+        </record>
+    </data>        
+</odoo>
