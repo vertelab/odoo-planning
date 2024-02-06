@@ -108,7 +108,7 @@ class Activities(models.Model):
     @api.model
     def create(self, values):
         res = super(Activities, self).create(values)
-        if values.get('planned_hours') <= 0:
+        if values.get('planned_hours') and values.get('planned_hours') <= 0:
             raise UserError(_("You cannot planned zero hours"))
         if res.res_model == 'project.task' and res.user_id:
             task_id = self.env[res.res_model].browse(res.res_id)
