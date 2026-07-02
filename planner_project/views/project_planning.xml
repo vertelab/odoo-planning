@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_project_kanban_inherit_time_plan">
+            <field name="name">project.kanban.inherit.time.plan</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_kanban"/>
+            <field name="arch" type="xml">
+                <div role="menuitem">
+                    <a type="action" name="%(action_project_planning_action)d" string="Time plan project">Time plan project</a>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>
+

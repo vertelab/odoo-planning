@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+        <record id="planner_ce_slot_wizard_form" model="ir.ui.view">
+            <field name="name">planner_ce.slot.wizard.form</field>
+            <field name="model">planner_ce.slot.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Request">
+                    <footer>
+                        <button name="action_set_request" type="object" string="Make Request" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_planning_slot_wizard_form" model="ir.actions.act_window">
+            <field name="name">Planning Slot Request</field>
+            <field name="res_model">planner_ce.slot.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="planner_ce_slot_wizard_form"/>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="planning_ce.model_planner_ce_slot"/>
+            <field name="binding_view_types">list</field>
+        </record>
+    </data>
+</odoo>

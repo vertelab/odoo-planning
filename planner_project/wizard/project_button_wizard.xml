@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+        
+        <record model="ir.actions.server" id="action_project_planning_action">
+            <field name="name">Time plan project</field>
+            <field name="model_id" ref="project.model_project_project"></field>
+            <field name="binding_model_id" ref="project.model_project_project"></field>
+            <field name="binding_view_types">form</field>
+            <field name="binding_type">action</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = record.action_plan_project()
+            </field>
+        </record>
+
+        <record id="project_planning_wizard" model="ir.ui.view">
+            <field name="name">bulk.planner.slot</field>
+            <field name="model">bulk.planner.slot</field>
+            <field name="arch" type="xml">
+                <form name="planning_wizard_list" string="Planning Wizard List">
+                    <h1 style="text-align: center;">
+                        <field name="project_id"></field>
+                    </h1>
+                    <group name="planning_wizard_list">
+                        <field name="employee_ids" string="Employee" widget="many2many_tags"/>
+                        <field name="start_datetime" string="Start time" widget="date"/>
+                        <field name="end_datetime" string="End time" widget="date"/>
+                        <field name="hours_per_week" widget="float_time" string="Work time"/>
+                        <field name="note"/>
+                    </group>
+                    <footer>
+                       <!-- <button name="create_slots" type="object">Create slots</button> -->
+                       <button name="time_allocator" type="object">Create slots</button>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

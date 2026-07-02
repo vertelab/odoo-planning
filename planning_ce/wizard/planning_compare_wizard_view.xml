@@ -1,0 +1,26 @@
+<odoo>
+    <record id="planning_ce.planning_compare_wizard" model="ir.ui.view">
+        <field name="name">ce_planner.report.wizard.form</field>
+        <field name="model">ce_planner.report.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Compare planned vs spent">
+                <group>
+                    <!-- <field name="project"/>
+                    <field name="employee"/> -->
+                    <field name="year"/>
+                    <field name="start_week"/>
+                    <field name="end_week"/>
+                    <!--<field name="v1"/>
+                    <field name="v2"/>   -->                 
+                    <!-- <field name="time_planned"/>
+                    <field name="time_spent"/> -->
+                </group>
+                <footer>
+                    <button name="do_something" string="Apply" type="object" class="btn-primary"/>
+                    <!-- <button name="cancel" string="Cancel" type="object" class="btn-default"/> -->
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

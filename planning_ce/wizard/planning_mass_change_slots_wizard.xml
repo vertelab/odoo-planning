@@ -1,0 +1,22 @@
+<odoo>
+    <data>
+
+        <record id="planning_mass_change_slots_wizard" model="ir.ui.view">
+            <field name="name">mass.change.slots</field>
+            <field name="model">mass.change.slots</field>
+            <field name="arch" type="xml">
+                <form name="planning_wizard_list" string="Planning Wizard List">
+                    <group name="planning_wizard_list">
+                        <field name="current_employee" string="Current Employee"/>
+                        <field name="employee_id" string="Change To Employee"/>
+                    </group>
+                    <footer>
+                        <button name="action_change_slots" type="object" class="oe_highlight">Change slots</button>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>
