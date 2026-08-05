@@ -6,7 +6,7 @@
             <field name="name">planner_ce.slot.tree</field>
             <field name="model">planner_ce.slot</field>
             <field name="arch" type="xml">
-                <tree string="Shift List">
+                <list string="Shift List">
                     <field name="employee_id" />
 <!--                    <field name="role_id" />-->
                     <field name="start_datetime" />
@@ -14,7 +14,7 @@
                     <field name="allocated_hours" widget="float_time" />
                     <field name="allocated_percentage" />
                     <field name="company_id" groups="base.group_multi_company" optional="show" />
-                </tree>
+                </list>
             </field>
         </record>
         <record id="planning_ce_view_form" model="ir.ui.view">
@@ -261,7 +261,7 @@
                     <field name="start_datetime"/>
                     <field name="end_datetime"/>
                     <templates>
-                        <t t-name="kanban-box">
+                        <t t-name="card">
                             <div class="oe_kanban_card oe_kanban_global_click">
                                 <div class="o_kanban_record_top">
                                     <div class="o_kanban_record_headings">
@@ -311,7 +311,7 @@
         <record id="planning_ce_action_schedule_by_employee" model="ir.actions.act_window">
             <field name="name">Planning Schedule</field>
             <field name="res_model">planner_ce.slot</field>
-            <field name="view_mode">calendar,kanban,tree,form,pivot</field>
+            <field name="view_mode">calendar,kanban,list,form,pivot</field>
             <field name="view_id" ref="planning_ce_view_calendar" />
             <field name="context">{'search_default_group_by_employee': 1, 'planning_expand_employee': 1}</field>
         </record>
@@ -327,7 +327,7 @@
 <!--        <record id="planning_ce_action_from_project" model="ir.actions.act_window">-->
 <!--            <field name="name">Project Planning</field>-->
 <!--            <field name="res_model">planner_ce.slot</field>-->
-<!--            <field name="view_mode">calendar,kanban,tree,form,pivot</field>-->
+<!--            <field name="view_mode">calendar,kanban,list,form,pivot</field>-->
 <!--            <field name="context">{-->
 <!--                'group_by': ['employee_id'],-->
 <!--                'default_project_id': active_id,-->
@@ -341,7 +341,7 @@
         <record id="planning_ce_action_schedule_by_project" model="ir.actions.act_window">
             <field name="name">Schedule by Project</field>
             <field name="res_model">planner_ce.slot</field>
-            <field name="view_mode">calendar,tree,form,kanban</field>
+            <field name="view_mode">calendar,list,form,kanban</field>
             <field name="context">{
                 'search_default_group_by_project': 1, 'planning_groupby_project': True,
                 'planning_expand_employee': 1, 'planning_expand_role': 1, 'planning_expand_project': 1, 'planning_expand_task': 1

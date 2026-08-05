@@ -100,12 +100,12 @@
             <field name="name">ce_planner_report_view</field>
             <field name="model">ce_planner.report</field>
             <field name="arch" type="xml">
-                <tree string="CE Planner Report">
+                <list string="CE Planner Report">
                     <field name="project_id"/>
                     <field name="employee_id"/>
                     <field name="time_planned"/>
                     <field name="time_spent"/>
-                </tree>
+                </list>
             </field>
         </record>
 

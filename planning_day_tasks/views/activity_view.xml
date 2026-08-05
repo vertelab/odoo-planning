@@ -12,7 +12,7 @@
                     <field name="planned_hours" widget="float_time"/>
                     <progressbar field="state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}' sum_field="planned_hours"/>
                     <templates>
-                       <t t-name="kanban-box">
+                       <t t-name="card">
                             <div class="oe_kanban_card oe_kanban_global_click">
                                 <div class="oe_kanban_content">
                                     <div class="o_kanban_record_top">
@@ -152,7 +152,7 @@
         <record id="action_view_all_planned_activities" model="ir.actions.act_window">
             <field name="name">All Daily Activities</field>
             <field name="res_model">mail.activity</field>
-            <field name="view_mode">kanban,tree,form,calendar,pivot</field>
+            <field name="view_mode">kanban,list,form,calendar,pivot</field>
             <field name="domain">[('res_model', '=', 'project.task')]</field>
             <field name="context">{'search_default_previous_day_activities': 1, 'search_default_today_activities': 1, 'search_default_next_day_activities': 1}</field>
             <field name="search_view_id" ref="mail.mail_activity_view_search"/>
@@ -173,7 +173,7 @@
         <record id="action_view_my_planned_activities" model="ir.actions.act_window">
             <field name="name">My Daily Activities</field>
             <field name="res_model">mail.activity</field>
-            <field name="view_mode">kanban,tree,form,calendar,pivot</field>
+            <field name="view_mode">kanban,list,form,calendar,pivot</field>
             <field name="domain">[('res_model', '=', 'project.task'),('user_id', '=', uid)]</field>
             <field name="context">{'search_default_previous_day_activities': 1, 'search_default_today_activities': 1, 'search_default_next_day_activities': 1}</field>
             <field name="search_view_id" ref="mail.mail_activity_view_search"/>

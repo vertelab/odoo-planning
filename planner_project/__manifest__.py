@@ -21,7 +21,7 @@
 
 {
     'name': 'Planning: For Projects',
-    'version': '14.1.1.1.0',
+    'version': '18.0.1.1.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
     'summary': '',
     'category': 'Project',

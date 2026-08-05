@@ -9,7 +9,7 @@
                     <field name="date"/>
                     <field name="planned_hours" widget="float_time"/>
                     <templates>
-                        <t t-name="kanban-box">
+                        <t t-name="card">
                             <div class="oe_kanban_card oe_kanban_global_click">
                                 <div class="row">
                                     <div class="col-3">
