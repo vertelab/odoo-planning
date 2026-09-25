@@ -25,10 +25,21 @@
     'name': 'Planning: Day Tasks',
     'version': '18.0.2.1.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': '',
+    'summary': "Adds day-based task planning.",
     'category': 'Administration',
-    'description': """
-    """,
+    'description': '''
+Day Tasks
+=========
+
+    Adds day-based task planning.
+
+    Features:
+
+        - Automation: Scheduled jobs: Activity: Cleanup over due activities.
+        - Guided Wizards: Step-by-step dialogs for data entry.
+        - UI Integration: Extends 4 view(s) in the Odoo interface.
+        - Extends Odoo: Builds on date, day.plan, mail.activity, project.task.
+    ''',
     #'sequence': '1',
     'author': 'Vertel AB',
     'website': 'https://vertel.se/apps/odoo-planning/planning_day_tasks',

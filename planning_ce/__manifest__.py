@@ -23,14 +23,20 @@
     'name': 'Planning: CE',
     'version': '18.0.1.1.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': '',
+    'summary': "Community edition additions for planning.",
     'category': 'Project',
-    'description': """
-Using Timeline to plan the work in a team
-=================================================
+    'description': '''
+CE
+==
 
-More information:
-    """,
+    Community edition additions for planning.
+
+    Features:
+
+        - Guided Wizards: Step-by-step dialogs for data entry.
+        - UI Integration: Extends 9 view(s) in the Odoo interface.
+        - Extends Odoo: Builds on bulk.planner.slot, bulk.planner_ce.slot, bulk.planner_ce.slot.wizard, ce_planner.report.
+    ''',
     #'sequence': '1',
     'author': 'Vertel AB',
     'website': 'https://vertel.se/apps/odoo-planning/planning_ce',

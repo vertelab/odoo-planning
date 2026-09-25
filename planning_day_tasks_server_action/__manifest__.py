@@ -25,10 +25,19 @@
     'name': 'Planning: Day Tasks Automation Support',
     'version': '18.0.2.1.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': '',
+    'summary': "Server action support for day-based planning tasks.",
     'category': 'Administration',
-    'description': """
-    """,
+    'description': '''
+Day Tasks Automation Support
+============================
+
+    Server action support for day-based planning tasks.
+
+    Features:
+
+        - UI Integration: Extends 1 view(s) in the Odoo interface.
+        - Extends Odoo: Builds on existing Odoo models.
+    ''',
     #'sequence': '1',
     'author': 'Vertel AB',
     'website': 'https://vertel.se/apps/odoo-planning/planning_day_tasks_server_action',

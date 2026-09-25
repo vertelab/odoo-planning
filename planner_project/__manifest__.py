@@ -23,15 +23,20 @@
     'name': 'Planning: For Projects',
     'version': '18.0.1.1.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': '',
+    'summary': "Adds project planning to the planner.",
     'category': 'Project',
-    'description': """
-Using Timeline to plan the work in a team
-=================================================
+    'description': '''
+For Projects
+============
 
-More information:
-Make sure that the working schedule have the correct timezone
-    """,
+    More information:
+    Make sure that the working schedule have the correct timezone
+
+    Features:
+
+        - Guided Wizards: Step-by-step dialogs for data entry.
+        - UI Integration: Extends 4 view(s) in the Odoo interface.
+    ''',
     #'sequence': '1',
     'author': 'Vertel AB',
     'website': 'https://vertel.se/apps/odoo-planning/planner_project',
