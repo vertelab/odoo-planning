@@ -59,5 +59,3 @@ Day Tasks
         # 'wizard/planning_wizard.xml',
     ]
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

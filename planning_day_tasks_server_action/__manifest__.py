@@ -51,5 +51,3 @@ Day Tasks Automation Support
         'views/activity_view.xml',
     ]
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
