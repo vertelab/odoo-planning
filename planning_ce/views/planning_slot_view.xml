@@ -23,16 +23,16 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-<!--                        <button name="action_draft" states="draft" string="Draft" type="object" class="oe_highlight" groups="base.group_user"/>-->
-                        <button name="action_request" states="draft" string="Request" type="object" class="oe_highlight" groups="project.group_project_manager"/>
-                        <button name="action_confirm" states="requested" string="Confirm" type="object" class="oe_highlight" groups="hr.group_hr_manager"/>
-                        <button name="action_denied" states="confirmed" string="Denied" type="object" class="oe_highlight" groups="base.group_user"/>
-                        <button name="action_cancel" states="confirmed" string="Cancel" type="object" class="oe_highlight" groups="base.group_user"/>
+<!--                        <button name="action_draft" invisible="state not in ['draft']" string="Draft" type="object" class="oe_highlight" groups="base.group_user"/>-->
+                        <button name="action_request" invisible="state not in ['draft']" string="Request" type="object" class="oe_highlight" groups="project.group_project_manager"/>
+                        <button name="action_confirm" invisible="state not in ['requested']" string="Confirm" type="object" class="oe_highlight" groups="hr.group_hr_manager"/>
+                        <button name="action_denied" invisible="state not in ['confirmed']" string="Denied" type="object" class="oe_highlight" groups="base.group_user"/>
+                        <button name="action_cancel" invisible="state not in ['confirmed']" string="Cancel" type="object" class="oe_highlight" groups="base.group_user"/>
 
                         <field name="state" widget="statusbar" options="{'clickable': '1', }"/>
                     </header>
 
-                    <div role="alert" class="alert-warning p-3 text-center" attrs="{'invisible': [('overlap_slot_count', '=', 0)]}">
+                    <div role="alert" class="alert-warning p-3 text-center" invisible="overlap_slot_count == 0">
                         <button name="action_see_overlapping_slots" type="object" class="btn-link">
                             <field name="overlap_slot_count" />
                             other shift(s)
@@ -63,12 +63,12 @@
                         </group>
 <!--                        <group>-->
 <!--                            <field name="repeat" />-->
-<!--                            <label for="repeat_interval" string="Repeat Every" attrs="{'invisible': [('repeat', '=', False)]}" />-->
-<!--                            <div class="o_row" attrs="{'invisible': [('repeat', '=', False)]}">-->
+<!--                            <label for="repeat_interval" string="Repeat Every" invisible="repeat == False" />-->
+<!--                            <div class="o_row" invisible="repeat == False">-->
 <!--                                <field name="repeat_interval" class="oe_inline" nolabel="1" />-->
 <!--                                <span>week(s)</span>-->
-<!--                                <field name="repeat_type" class="oe_inline" nolabel="1" attrs="{'required': [('repeat', '=', True)]}" />-->
-<!--                                <field name="repeat_until" class="oe_inline" attrs="{'invisible': [('repeat_type', '!=', 'until')], 'required': [('repeat_type', '=', 'until')]}" nolabel="1" />-->
+<!--                                <field name="repeat_type" class="oe_inline" nolabel="1" required="repeat == True" />-->
+<!--                                <field name="repeat_until" class="oe_inline" nolabel="1" invisible="repeat_type != 'until'" required="repeat_type == 'until'" />-->
 <!--                            </div>-->
 <!--                        </group>-->
                         <group>
@@ -95,12 +95,12 @@
                     <footer>
                         <field name="publication_warning" invisible="1" />
                         <button string="Save" special="save" class="btn btn-primary" close="1" />
-                        <button string="Publish &amp; Send" type="object" name="action_send" class="btn btn-primary" close="1" attrs="{'invisible': [('employee_id', '=', False)]}" />
+                        <button string="Publish &amp; Send" type="object" name="action_send" class="btn btn-primary" close="1" invisible="employee_id == False" />
                         <button string="Publish" type="object" name="action_publish" class="btn btn-primary" close="1" />
-                        <button name="unlink" string="Delete" type="object" class="btn-secondary" close="1" attrs="{'invisible': [('id', '=', False)]}" confirm="Are you sure you want to do delete this shift?" />
+                        <button name="unlink" string="Delete" type="object" class="btn-secondary" close="1" confirm="Are you sure you want to do delete this shift?" invisible="id == False" />
                         <button string="Discard" special="cancel" class="btn-secondary" close="1" fullscreen="True" />
-                        <button name="action_self_assign" class="btn btn-primary float-right" type="object" string="I take it" attrs="{'invisible': [('employee_id', '!=', False)]}" close="1" />
-                        <!-- <button name="action_self_unassign" class="btn btn-secondary float-right" type="object" string="I am unavailable" attrs="{'invisible': ['|', ('is_assigned_to_me', '=', False), ('allow_self_unassign', '=', False)]}" close="1" /> -->
+                        <button name="action_self_assign" class="btn btn-primary float-right" type="object" string="I take it" close="1" invisible="employee_id != False" />
+                        <!-- <button name="action_self_unassign" class="btn btn-secondary float-right" type="object" string="I am unavailable" close="1" invisible="(is_assigned_to_me == False or allow_self_unassign == False)" /> -->
                     </footer>
                 </xpath>
             </field>

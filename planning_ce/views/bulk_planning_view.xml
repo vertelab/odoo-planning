@@ -11,14 +11,14 @@
                     <br/>
                     <label for="planning_ids"/>
                     <field name="planning_ids" nolabel="1">
-                        <tree editable="bottom">
+                        <list editable="bottom">
                             <field name="employee_id"/>
                             <field name="week_selection" />
                             <field name="start_datetime" />
                             <field name="end_datetime" />
                             <field name="allocated_percentage" />
                             <field name="allocated_hours" />
-                        </tree>
+                        </list>
                     </field>
                     <footer>
                         <button string="Plan" name="action_plan" type="object" class="oe_highlight"/>

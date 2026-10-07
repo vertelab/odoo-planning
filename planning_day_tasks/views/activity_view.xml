@@ -93,25 +93,25 @@
                         <group>
                               <field name="planned_hours" widget="float_time"/>
                         </group>
-                        <group attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
+                        <group invisible="res_model != 'project.task'">
                             <field name="planned_hours" widget="float_time"/>
                             <field name="price_unit_task" />
                             <field name="task_user_id" invisible="1"/>
                             <field name="project_date_deadline"/>
                         </group>
-                        <group attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
+                        <group invisible="res_model != 'project.task'">
                             <field name="project_id"/>
                             <field name="task_id"/>
                         </group>
                     </group>
-                    <group string="Recent Activities" attrs="{'invisible': [('res_model', '!=', 'project.task')]}">
+                    <group string="Recent Activities" invisible="res_model != 'project.task'">
                         <field name="recent_user_activity_ids" nolabel="1">
-                            <tree>
+                            <list>
                                 <field name="user_id"/>
                                 <field name="date"/>
                                 <field name="date_weekday"/>
                                 <field name="planned_hours"  widget="float_time" sum="Total"/>
-                            </tree>
+                            </list>
                         </field>
                     </group>
                 </xpath>

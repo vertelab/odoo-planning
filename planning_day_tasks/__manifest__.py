@@ -23,7 +23,7 @@
 
 {
     'name': 'Planning: Day Tasks',
-    'version': '18.0.2.1.0',
+    'version': '18.0.2.1.1',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
     'summary': "Adds day-based task planning.",
     'category': 'Administration',
