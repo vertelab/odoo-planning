@@ -105,24 +105,25 @@ class Activities(models.Model):
             self.user_id = self.task_user_id.id
             self.summary = self.task_id.name
 
-    @api.model
-    def create(self, values):
-        res = super(Activities, self).create(values)
-        if res.res_model == 'project.task' and values.get('planned_hours') <= 0:
-            raise UserError(_("You cannot planned zero hours"))
-        if res.res_model == 'project.task' and res.user_id:
-            task_id = self.env[res.res_model].browse(res.res_id)
-            task_id.write({"user_id": res.user_id.id})
+    @api.model_create_multi
+    def create(self, values_list):
+        res = super().create(values_list)
+        for rec, values in zip(res, values_list):
+            if rec.res_model == 'project.task' and values.get('planned_hours', 0) <= 0:
+                raise UserError(_("You cannot planned zero hours"))
+            if rec.res_model == 'project.task' and rec.user_id:
+                task_id = self.env[rec.res_model].browse(rec.res_id)
+                task_id.write({"user_id": rec.user_id.id})
 
-            res.recalculate_planned_hours_for_task()
-            day_plan_id = self.env['day.plan'].search([
-                ('user_id', '=', res.user_id.id),
-                ('date', '=', res.date_deadline)
-            ], limit=1)
-            if not day_plan_id:
-                self.env['day.plan'].create({
-                    'user_id': res.user_id.id, 'date': res.date_deadline
-                })
+                rec.recalculate_planned_hours_for_task()
+                day_plan_id = self.env['day.plan'].search([
+                    ('user_id', '=', rec.user_id.id),
+                    ('date', '=', rec.date_deadline)
+                ], limit=1)
+                if not day_plan_id:
+                    self.env['day.plan'].create({
+                        'user_id': rec.user_id.id, 'date': rec.date_deadline
+                    })
         return res
 
     def write(self, values):
