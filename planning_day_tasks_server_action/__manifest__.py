@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Odoo SA, Open Source Management Solution, third party addon
-#    Copyright (C) 2022- Vertel AB (<https://vertel.se>).
+#    Copyright (C) 2022- Vertel Sverige AB (<https://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -23,31 +23,24 @@
 
 {
     'name': 'Planning: Day Tasks Automation Support',
-    'version': '18.0.2.1.1',
+    'version': '18.0.2.1.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': "Server action support for day-based planning tasks.",
+    'summary': '',
     'category': 'Administration',
-    'description': '''
-Day Tasks Automation Support
-============================
-
-    Server action support for day-based planning tasks.
-
-    Features:
-
-        - UI Integration: Extends 1 view(s) in the Odoo interface.
-        - Extends Odoo: Builds on existing Odoo models.
-    ''',
+    'description': """
+    """,
     #'sequence': '1',
-    'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-planning/planning_day_tasks_server_action',
+    'author': 'Vertel Sverige AB',
+    'website': 'https://vertel.se/apps/odoo-planning/planning_day_tasks',
     'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
-    'maintainer': 'Vertel AB',
+    'maintainer': 'Vertel Sverige AB',
     'repository': 'https://github.com/vertelab/odoo-planning',
     'depends': ['planning_day_tasks', "mail"],
     'data': [
         'views/activity_view.xml',
     ]
 }
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
