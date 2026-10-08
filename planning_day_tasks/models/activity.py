@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class Activities(models.Model):
     _inherit = 'mail.activity'
-    _order = 'stage_id, date_deadline'
+    _order = 'date_deadline'
 
     active = fields.Boolean(string="Active", default=True)
    
