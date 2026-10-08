@@ -77,7 +77,7 @@
             <field name="inherit_id" ref="calendar.mail_activity_view_form_popup"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='note']" position="attributes">
-                    <attribute name="attrs">{'invisible': ['|', ('res_model', '=', 'project.task'), ('activity_category', '=', 'meeting')]}</attribute>
+                    <attribute name="invisible">['|', ('res_model', '=', 'project.task'), ('activity_category', '=', 'meeting')]</attribute>
                 </xpath>
             </field>
         </record>
