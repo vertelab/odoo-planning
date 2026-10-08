@@ -51,11 +51,15 @@ Day Tasks
     'depends': ['project', 'hr', 'hr_timesheet', "calendar"],
     'data': [
         'security/ir.model.access.csv',
-        'views/assets.xml',
         'views/day_plan.xml',
         'views/activity_view.xml',
         'views/task_view.xml',
         'data/cron.xml',
         # 'wizard/planning_wizard.xml',
-    ]
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'planning_day_tasks/static/src/js/task_activity_kanban.js',
+        ],
+    },
 }
