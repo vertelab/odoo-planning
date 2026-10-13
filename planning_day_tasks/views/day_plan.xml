@@ -4,7 +4,7 @@
             <field name="name">day.plan.kanban</field>
             <field name="model">day.plan</field>
             <field name="arch" type="xml">
-                <kanban default_group_by="date:week" class="o_kanban_dashboard o_kanban_small_column" js_class="project_kanban" sample="1" create="false">
+                <kanban default_group_by="date:week" class="o_kanban_dashboard o_kanban_small_column" sample="1" create="false">
                     <field name="user_id"/>
                     <field name="date"/>
                     <field name="planned_hours" widget="float_time"/>
